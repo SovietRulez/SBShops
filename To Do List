@@ -1,0 +1,5 @@
+Add civilian coords for purchasing items in config
+Add robbery of each shop by % of players money in shop account
+Add police notification for robbery
+Add database syncing for all columns
+Add Inventory screening when players try to buy items(like qb-shops)
