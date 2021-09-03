@@ -1,20 +1,4 @@
-local seconds = 1000
-local minute = 60 * seconds
-local hour = 60 * minute
-function DrawText3D(coords, text)
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(true)
-    AddTextComponentString(text)
-    SetDrawOrigin(coords, 0)
-    DrawText(0.0, 0.0)
-    local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
-    ClearDrawOrigin()
-end
+local second = 1000
 
 local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
     'example_namespace')
@@ -188,7 +172,7 @@ AddEventHandler('SBShops:openMenuJob', function(source)
     end
 end)
 
-function GetClosestPlayer()
+function GetClosestPlayer() -- Soviet use this instead QBCore.Functions.GetClosestPlayer(coords)
     local closestPlayers = QBCore.Functions.GetPlayersFromCoords()
     local closestDistance = -1
     local closestPlayer = -1
@@ -209,6 +193,21 @@ function GetClosestPlayer()
     return closestPlayer, closestDistance
 end
 
+function DrawText3D(coords, text)
+    SetTextScale(0.35, 0.35)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextColour(255, 255, 255, 215)
+    SetTextEntry("STRING")
+    SetTextCentre(true)
+    AddTextComponentString(text)
+    SetDrawOrigin(coords, 0)
+    DrawText(0.0, 0.0)
+    local factor = (string.len(text)) / 370
+    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
+    ClearDrawOrigin()
+end
+
 function Robbery(parent, child)
     -- print(Config.Shops[parent].cooldown)
     Citizen.Wait(Config.RobTime * seconds)
@@ -223,6 +222,5 @@ function Cooldown(parent, child)
         Wait(Config.Shops[parent].cooldown * seconds)
         Config.Shops[parent].onC = false
         isActive = false
-
     end)
 end
