@@ -98,6 +98,7 @@ Citizen.CreateThread(function()
                 local dist = #(PlayerPos - child.bossLocation)
                 local robdist = #(PlayerPos - child.robLocation)
                 local buyLocation = #(PlayerPos - child.location)
+                local products = Config.Shops[parent].allowedItems
                 if buyLocation < 2 then
                     inRange = true
                     DrawText3D(child.bossLocation, "~g~" .. child.name)
@@ -122,9 +123,11 @@ Citizen.CreateThread(function()
                     print(child)
                     print(child.allowedItems)
                     isActive = true
-                    child.allowedItems.slots = 30
-                    TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_" .. parent,
-                        child.allowedItems)
+                    local ShopItems = {}
+                    ShopItems.label = Config.Shops[parent]["name"]
+                    ShopItems.items = Config.Shops[parent]["allowedItems"]
+                    ShopItems.slots = 30
+                    TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..parent, ShopItems)
                     -- MenuV:OpenMenu(menu)
                     local data = {
                         displayCode = '911',
