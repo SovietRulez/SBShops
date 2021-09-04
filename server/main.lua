@@ -7,11 +7,13 @@ QBCore.Functions.CreateCallback('sellShop', function(source, cb, target, globalV
     if not result[1] then
         TriggerClientEvent("QBCore:Notify", src, "Shop has been sold", "success", 5000)
         exports['ghmattimysql']:execute('INSERT INTO sbshops (citizenid, shopName) VALUES (@citizenid, @shopName)', {
-            ['citizenid'] = targetCID,
-            ['shopName'] = globalVar
+            ['citizenid'] = targetCID, 
+            ['shopName'] = globalVar,
         })
     elseif result[1] then
         TriggerClientEvent("QBCore:Notify", src, "Shop is already owned!", "error", 5000)
     end
 end)
-------------SELL SHOP----------------^^^^^^^^^^^^^^^^^^^
+------------SELL SHOP----------------^^^^^^^^^^^^^^^^^^^ DONT TOUCH 
+
+
