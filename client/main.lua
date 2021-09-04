@@ -34,6 +34,14 @@ local sellStoreButton = menu3:AddButton({
     description = 'Sells Current Location To Closest Player'
 })
 
+
+sellStoreButton:On('select', function()
+    local target = 1
+   -- local target = QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId()))
+    QBCore.Functions.TriggerCallback('sellShop', function(shopName)
+    end,target, shopName)
+end)
+
 statusButton:On('select', function()
     TriggerServerEvent('check')
     QBCore.Functions.TriggerCallback('check', function(storeOwned)
@@ -48,21 +56,7 @@ statusButton:On('select', function()
         end
     end)
 end)
-
-RegisterNetEvent('SBShops:client:alert')
-AddEventHandler('SBShops:client:alert', function(owned)
-    if owned then
-        QBCore.Functions.Notify("Store is Owned", 'error', 5000)
-    else
-        QBCore.Functions.Notify("Store is ready for purchase", 'success', 5000)
-    end
-end)
-
-RegisterNetEvent('SBShops:client:shopItems')
-AddEventHandler('SBShops:client:shopItems', function(shop, allowed)
-    Config.Shops[shop]["allowedItems"] = allowed
-end)
-
+------------------^^^^^^^^^^^^^Menu portion 
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
@@ -99,13 +93,21 @@ Citizen.CreateThread(function()
                 if currentZone == 'boss' then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. shopData.name)
                     if IsControlJustReleased(1, 38) then
-                        print('Hi Dad')
+
                     end
                 elseif currentZone == 'realEstate' then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                     if IsControlJustReleased(1, 38) then
-                        MenuV:OpenMenu(menu)
-                        -- TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shop, ShopItems)
+                        MenuV:OpenMenu(menu3)
+                    end
+                elseif currentZone == 'customer' then
+                    DrawText3D(shopData.locations[currentZone], "~g~" .. 'Shop Here')
+                    if IsControlJustReleased(1, 38) then
+                        local ShopItems = {}
+                        ShopItems.label = Config.Shops[shopName]["name"]
+                        ShopItems.items = Config.Shops[shopName]["allowedItems"]
+                        ShopItems.slots = 30
+                        TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shopName, ShopItems)
                     end
                 elseif currentZone == 'robLocation' then
                     if not shopData.onC then
@@ -119,27 +121,8 @@ Citizen.CreateThread(function()
                         print(shopData)
                         print(shopData.allowedItems)
                         isBusy = true
-                        local ShopItems = {}
-                        ShopItems.label = Config.Shops[shopName]["name"]
-                        ShopItems.items = Config.Shops[shopName]["allowedItems"]
-                        ShopItems.slots = 30
-                        TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shopName, ShopItems)
+                       -- TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shopName, ShopItems)
                         -- MenuV:OpenMenu(menu)
-                        local data = {
-                            displayCode = '911',
-                            description = 'Robbery In Progress',
-                            isImportant = 1,
-                            recipientList = {'police'},
-                            length = '25000',
-                            infoM = 'fa-info-circle',
-                            info = 'Armed Suspects at attempting Robbery at ' .. shopName
-                        }
-                        local dispatchData = {
-                            dispatchData = data,
-                            caller = 'Alarm',
-                            coords = shopData.robLocation
-                        }
-                        TriggerServerEvent('wf-alerts:svNotify', dispatchData)
                         Robbery(shopName, shopData)
                         isBusy = false
                     end
@@ -150,26 +133,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-function SetupItems(shop)
-    local products = Config.Shops[shop].allowedItems
-    local playerJob = QBCore.Functions.GetPlayerData().job.name
-    local items = {}
-
-    for i = 1, #products do
-        --if not products[i].requiredJob then
-            table.insert(items, products[i])
-        --else
-            --for i2 = 1, #products[i].requiredJob do
-                --if playerJob == products[i].requiredJob[i2] then
-                --    table.insert(items, products[i])
-                --end
-           -- end
-        end
-   -- end
-
-    return items
-end
-
 RegisterNetEvent('SBShops:openMenuJob')
 AddEventHandler('SBShops:openMenuJob', function(source)
     if QBCore.Functions.GetPlayerData().job.name == Config.Job then
@@ -178,27 +141,6 @@ AddEventHandler('SBShops:openMenuJob', function(source)
         QBCore.Functions.Notify("You're not apart of " .. Config.Job, 'error', 5000)
     end
 end)
-
-function GetClosestPlayer() -- Soviet use this instead QBCore.Functions.GetClosestPlayer(coords)
-    local closestPlayers = QBCore.Functions.GetPlayersFromCoords()
-    local closestDistance = -1
-    local closestPlayer = -1
-    local coords = GetEntityCoords(PlayerPedId())
-
-    for i = 1, #closestPlayers, 1 do
-        if closestPlayers[i] ~= PlayerId() then
-            local pos = GetEntityCoords(GetPlayerPed(closestPlayers[i]))
-            local distance = #(pos - coords)
-
-            if closestDistance == -1 or closestDistance > distance then
-                closestPlayer = closestPlayers[i]
-                closestDistance = distance
-            end
-        end
-    end
-
-    return closestPlayer, closestDistance
-end
 
 function DrawText3D(coords, text)
     SetTextScale(0.35, 0.35)
@@ -216,14 +158,27 @@ function DrawText3D(coords, text)
 end
 
 function Robbery(shopName, shopData)
-    -- print(Config.Shops[shopName].cooldown)
+    local data = {
+        displayCode = '911',
+        description = 'Robbery In Progress',
+        isImportant = 1,
+        recipientList = {'police'},
+        length = '25000',
+        infoM = 'fa-info-circle',
+        info = 'Armed Suspects at attempting Robbery at ' .. shopName
+    }
+    local dispatchData = {
+        dispatchData = data,
+        caller = 'Alarm',
+        coords = shopData.locations.robLocation
+    }
+    TriggerServerEvent('wf-alerts:svNotify', dispatchData)
     Citizen.Wait(Config.RobTime * seconds)
     Cooldown(shopName)
 end
 
 function Cooldown(shopName, shopData)
     Citizen.CreateThread(function()
-        -- print(shopName)
         isBusy = true
         Config.Shops[shopName].onC = true
         Wait(Config.Shops[shopName].cooldown * seconds)
