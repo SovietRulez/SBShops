@@ -36,10 +36,7 @@ local sellStoreButton = menu3:AddButton({
 
 
 sellStoreButton:On('select', function()
-    local target = 1
-   -- local target = QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId()))
-    QBCore.Functions.TriggerCallback('sellShop', function(shopName)
-    end,target, shopName)
+TriggerEvent('variable:pass')
 end)
 
 statusButton:On('select', function()
@@ -132,6 +129,14 @@ Citizen.CreateThread(function()
         Citizen.Wait(5)
     end
 end)
+
+RegisterNetEvent('variable:pass')
+AddEventHandler('variable:pass', function(source, target, shopName)
+    local target = 1 --QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId()))
+    QBCore.Functions.TriggerCallback('sellShop', function()
+    end,target, shopName)
+end)
+
 
 RegisterNetEvent('SBShops:openMenuJob')
 AddEventHandler('SBShops:openMenuJob', function(source)
