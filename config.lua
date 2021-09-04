@@ -4,8 +4,8 @@ Config.QBTarget = false -- CHANGE IF YOU USE qb-Target
 Config.RobTime = 10
 Config.Shops = {
     taco = {
-        name = 'Taco Party'
-        --[[locations = {
+        name = 'Taco Party',
+        locations = {
             boss = vector3(376.54, 325.46, 103.57),
             customer = vector3(373.77, 326.09, 103.57),
             robLocation = vector3(373.1, 329.05, 103.57),
@@ -32,7 +32,7 @@ Config.Shops = {
         },
         robbed = false,
         cooldown = 10,
-        onC = false]]
+        onC = false
 },
     -- [2] = {
     --     name = 'test2',
