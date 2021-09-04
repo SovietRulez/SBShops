@@ -36,12 +36,14 @@ local sellStoreButton = menu3:AddButton({
 
 
 sellStoreButton:On('select', function()
-    local target = 1 --QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId()))
+
+    local target = GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
     local shopInfo = Config.Shops[globalVar]
+    print(target)
 QBCore.Functions.TriggerCallback('sellShop', function(cb)
 end, target, globalVar)
 end)
-
+------------------^^^^ DONT TOUCH DAMN IT
 statusButton:On('select', function()
     TriggerServerEvent('check')
     QBCore.Functions.TriggerCallback('check', function(storeOwned)
@@ -56,6 +58,7 @@ statusButton:On('select', function()
         end
     end)
 end)
+
 ------------------^^^^^^^^^^^^^Menu portion 
 
 Citizen.CreateThread(function()
@@ -108,7 +111,7 @@ Citizen.CreateThread(function()
                         local ShopItems = {}
                         ShopItems.label = Config.Shops[shopName]["name"]
                         ShopItems.items = Config.Shops[shopName]["allowedItems"]
-                        ShopItems.slots = 30
+                        ShopItems.slots = 10
                         TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shopName, ShopItems)
                     end
                 elseif currentZone == 'robLocation' then
