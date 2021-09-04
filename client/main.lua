@@ -1,5 +1,5 @@
 local seconds = 1000
-
+local globalVar = 'nil'
 local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace')
 local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace2')
 local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace3')
@@ -36,7 +36,10 @@ local sellStoreButton = menu3:AddButton({
 
 
 sellStoreButton:On('select', function()
-TriggerEvent('variable:pass')
+    local target = 1 --QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId()))
+    local shopInfo = Config.Shops[globalVar]
+QBCore.Functions.TriggerCallback('sellShop', function(cb)
+end, target, globalVar)
 end)
 
 statusButton:On('select', function()
@@ -54,6 +57,7 @@ statusButton:On('select', function()
     end)
 end)
 ------------------^^^^^^^^^^^^^Menu portion 
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
@@ -95,7 +99,8 @@ Citizen.CreateThread(function()
                 elseif currentZone == 'realEstate' then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                     if IsControlJustReleased(1, 38) then
-                        MenuV:OpenMenu(menu3)
+                        globalVar = shopData.name
+                        MenuV:OpenMenu(menu3, globalVar)
                     end
                 elseif currentZone == 'customer' then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Shop Here')
@@ -118,8 +123,6 @@ Citizen.CreateThread(function()
                         print(shopData)
                         print(shopData.allowedItems)
                         isBusy = true
-                       -- TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shopName, ShopItems)
-                        -- MenuV:OpenMenu(menu)
                         Robbery(shopName, shopData)
                         isBusy = false
                     end
@@ -128,13 +131,6 @@ Citizen.CreateThread(function()
         end
         Citizen.Wait(5)
     end
-end)
-
-RegisterNetEvent('variable:pass')
-AddEventHandler('variable:pass', function(source, target, shopName)
-    local target = 1 --QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId()))
-    QBCore.Functions.TriggerCallback('sellShop', function()
-    end,target, shopName)
 end)
 
 
