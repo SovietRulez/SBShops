@@ -1,4 +1,5 @@
 local seconds = 1000
+local ShopItems = {}
 local globalVar = 'nil'
 local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace')
 local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace2')
@@ -37,11 +38,11 @@ local sellStoreButton = menu3:AddButton({
 
 sellStoreButton:On('select', function()
 
-    local target = GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
+    local target = 1--GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
     local shopInfo = Config.Shops[globalVar]
     print(target)
 QBCore.Functions.TriggerCallback('sellShop', function(cb)
-end, target, globalVar)
+end, target, globalVar, ShopItems)
 end)
 ------------------^^^^ DONT TOUCH DAMN IT
 statusButton:On('select', function()
@@ -108,7 +109,6 @@ Citizen.CreateThread(function()
                 elseif currentZone == 'customer' then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Shop Here')
                     if IsControlJustReleased(1, 38) then
-                        local ShopItems = {}
                         ShopItems.label = Config.Shops[shopName]["name"]
                         ShopItems.items = Config.Shops[shopName]["allowedItems"]
                         ShopItems.slots = 10
