@@ -1,9 +1,22 @@
-QBCore.Functions.CreateCallback('check', function(source, cb)
-    if not owned then
-    TriggerClientEvent('QBCore:Notify', source, "Shop owned", 'error', 10000)
-    cb(true)
-    else 
-        TriggerClientEvent('QBCore:Notify', source, "Shop available", 'success', 10000)
-        cb(false)
+QBCore.Functions.CreateCallback('sellShop', function(source, cb, target, shopName)
+    local src = source
+    local targetPlayer = QBCore.Functions.GetPlayer(target).PlayerData
+    local targetCID = targetPlayer.citizenid
+    local result = exports.ghmattimysql:executeSync('SELECT * FROM sbshops WHERE citizenid=@citizenid', {['@citizenid'] = targetCID})
+    local shopName = "taco"
+    print(target)
+    print(json.encode(result[1]))
+    print(shopName)
+    print(targetCID)
+    if not result[1] then
+        TriggerClientEvent("QBCore:Notify", src, "Shop has been sold", "success", 5000)
+        exports['ghmattimysql']:execute('INSERT INTO sbshops (citizenid, shopName) VALUES (@citizenid, @shopName)', {
+            ['citizenid'] = targetCID,
+            ['shopName'] = Config.Shops[shopName].name
+        })
+    elseif result[1] then
+        TriggerClientEvent("QBCore:Notify", src, "Shop is already owned!", "error", 5000)
     end
 end)
+
+------------SELL SHOP----------------^^^^^^^^^^^^^^^^^^^
