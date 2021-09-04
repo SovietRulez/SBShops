@@ -1,40 +1,41 @@
-local second = 1000
+local seconds = 1000
 
-local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
-    'example_namespace')
-local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
-    'example_namespace2')
-local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
-    'example_namespace3')
-local menu_button = menu:AddButton({
+local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace')
+local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace2')
+local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace3')
+
+-- Management Menu
+local statusButton = menu:AddButton({
     icon = '😃',
     label = 'Check Store Status',
     value = 0,
     description = 'Checks If Store Is Owned'
 })
-local menu_button3 = menu2:AddButton({
+
+-- Account Info Menu
+local repoButton = menu2:AddButton({
     icon = '😃',
     label = 'Repossess store',
     value = 0,
     description = 'Repo Current Store Location'
 })
-local menu_button4 = menu2:AddButton({
+local checkFundsButton = menu2:AddButton({
     icon = '😃',
     label = 'Check Account Funds',
     value = 0,
     description = 'Check Store Money'
 })
-local menu_button2 = menu3:AddButton({
+
+-- Shop Sale Menu
+local sellStoreButton = menu3:AddButton({
     icon = '😃',
     label = 'Sell To Nearby Player',
     value = 0,
     description = 'Sells Current Location To Closest Player'
 })
 
-menu_button:On('select', function()
-    -- print('2')
+statusButton:On('select', function()
     TriggerServerEvent('check')
-    -- print('1')
     QBCore.Functions.TriggerCallback('check', function(storeOwned)
         if storeOwned then
             MenuV:CloseMenu(menu)
@@ -58,93 +59,99 @@ AddEventHandler('SBShops:client:alert', function(owned)
 end)
 
 RegisterNetEvent('SBShops:client:shopItems')
-AddEventHandler('SBShops:client:shopItems', function(parent, allowed)
-    Config.Shops[parent]["allowedItems"] = allowed
+AddEventHandler('SBShops:client:shopItems', function(shop, allowed)
+    Config.Shops[shop]["allowedItems"] = allowed
 end)
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-        if isActive then
+        if isBusy then
             DisableControlAction(0, 38, true)
         end
     end
 end)
-Citizen.CreateThread(function()
 
+local isInMarker, currentZone = false, nil
+Citizen.CreateThread(function()
     if not Config.QBTarget then
         while true do
             Citizen.Wait(4)
-            local isActive = false
-            local InRange = false
+            local isBusy = false
             local player = PlayerPedId()
-            local PlayerPos = GetEntityCoords(player)
-            for parent, child in pairs(Config.Shops) do
-                local dist = #(PlayerPos - child.bossLocation)
-                local robdist = #(PlayerPos - child.robLocation)
-                local buyLocation = #(PlayerPos - child.location)
-                local products = Config.Shops[parent].allowedItems
-                if buyLocation < 2 then
-                    inRange = true
-                    DrawText3D(child.bossLocation, "~g~" .. child.name)
-                    -- TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..parent, Config.Shops[parent].allowedItems)
+            local playerPos = GetEntityCoords(player)
+            for shopName, shopData in pairs(Config.Shops) do
+                local products = Config.Shops[shopName].allowedItems
+                for locationName, locationCoords in pairs(shopData.locations) do
+                    local distance = #(playerPos - locationCoords)
+                    if not isInMarker and currentZone == nil then
+                        if distance <= 1.5 then
+                            currentZone = locationName
+                            isInMarker = true
+                        end
+                    elseif isInMarker and currentZone == locationName then
+                        if distance > 1.5 then
+                            currentZone = nil
+                            isInMarker = false
+                        end
+                    end
                 end
-                if dist <= 2 and IsControlJustReleased(0, 38) then
-                    -- MenuV:OpenMenu(menu)
-                    -- TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shop, ShopItems) 
-                end
-                if robdist <= 2 and not isActive and not child.onC then
-                    inRange = true
-                    DrawText3D(child.robLocation, "~r~ Rob store ~w~" .. child.name)
-                end
-                if robdist <= 2 and child.onC then
-                    inRange = true
-                    DrawText3D(child.robLocation, "~r~ Store on cooldown")
-                end
-                if robdist <= 2 and IsControlJustReleased(0, 38) and not child.onC then
-
-                    Config.Shops[parent].robbed = true
-                    print(parent)
-                    print(child)
-                    print(child.allowedItems)
-                    isActive = true
-                    local ShopItems = {}
-                    ShopItems.label = Config.Shops[parent]["name"]
-                    ShopItems.items = Config.Shops[parent]["allowedItems"]
-                    ShopItems.slots = 30
-                    TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..parent, ShopItems)
-                    -- MenuV:OpenMenu(menu)
-                    local data = {
-                        displayCode = '911',
-                        description = 'Robbery In Progress',
-                        isImportant = 1,
-                        recipientList = {'police'},
-                        length = '25000',
-                        infoM = 'fa-info-circle',
-                        info = 'Armed Suspects at attempting Robbery at ' .. parent
-                    }
-                    local dispatchData = {
-                        dispatchData = data,
-                        caller = 'Alarm',
-                        coords = child.robLocation
-                    }
-                    TriggerServerEvent('wf-alerts:svNotify', dispatchData)
-                    Robbery(parent, child)
-                    isActive = false
-
+                if currentZone == 'boss' then
+                    DrawText3D(shopData.locations[currentZone], "~g~" .. shopData.name)
+                    if IsControlJustReleased(1, 38) then
+                        print('Hi Dad')
+                    end
+                elseif currentZone == 'realEstate' then
+                    DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
+                    if IsControlJustReleased(1, 38) then
+                        MenuV:OpenMenu(menu)
+                        -- TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shop, ShopItems)
+                    end
+                elseif currentZone == 'robLocation' then
+                    if not shopData.onC then
+                        DrawText3D(shopData.locations[currentZone], "~r~ Rob store ~w~" .. shopData.name)
+                    else
+                        DrawText3D(shopData.locations[currentZone], "~r~ Store on cooldown")
+                    end
+                    if IsControlJustReleased(1, 38) then
+                        Config.Shops[shopName].robbed = true
+                        print(shopName)
+                        print(shopData)
+                        print(shopData.allowedItems)
+                        isBusy = true
+                        local ShopItems = {}
+                        ShopItems.label = Config.Shops[shopName]["name"]
+                        ShopItems.items = Config.Shops[shopName]["allowedItems"]
+                        ShopItems.slots = 30
+                        TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shopName, ShopItems)
+                        -- MenuV:OpenMenu(menu)
+                        local data = {
+                            displayCode = '911',
+                            description = 'Robbery In Progress',
+                            isImportant = 1,
+                            recipientList = {'police'},
+                            length = '25000',
+                            infoM = 'fa-info-circle',
+                            info = 'Armed Suspects at attempting Robbery at ' .. shopName
+                        }
+                        local dispatchData = {
+                            dispatchData = data,
+                            caller = 'Alarm',
+                            coords = shopData.robLocation
+                        }
+                        TriggerServerEvent('wf-alerts:svNotify', dispatchData)
+                        Robbery(shopName, shopData)
+                        isBusy = false
+                    end
                 end
             end
-
-        end
-
-        if not InRange then
-            Citizen.Wait(5000)
         end
         Citizen.Wait(5)
     end
 end)
 
-function SetupItems(parent)
-    local products = Config.Shops[parent].allowedItems
+function SetupItems(shop)
+    local products = Config.Shops[shop].allowedItems
     local playerJob = QBCore.Functions.GetPlayerData().job.name
     local items = {}
 
@@ -208,19 +215,19 @@ function DrawText3D(coords, text)
     ClearDrawOrigin()
 end
 
-function Robbery(parent, child)
-    -- print(Config.Shops[parent].cooldown)
+function Robbery(shopName, shopData)
+    -- print(Config.Shops[shopName].cooldown)
     Citizen.Wait(Config.RobTime * seconds)
-    Cooldown(parent)
+    Cooldown(shopName)
 end
 
-function Cooldown(parent, child)
+function Cooldown(shopName, shopData)
     Citizen.CreateThread(function()
-        -- print(parent)
-        isActive = true
-        Config.Shops[parent].onC = true
-        Wait(Config.Shops[parent].cooldown * seconds)
-        Config.Shops[parent].onC = false
-        isActive = false
+        -- print(shopName)
+        isBusy = true
+        Config.Shops[shopName].onC = true
+        Wait(Config.Shops[shopName].cooldown * seconds)
+        Config.Shops[shopName].onC = false
+        isBusy = false
     end)
 end

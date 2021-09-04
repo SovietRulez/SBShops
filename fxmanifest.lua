@@ -11,9 +11,11 @@ shared_scripts {
 
 client_scripts {
     '@menuv/menuv.lua',
+    'client/menu.lua',
     'client/main.lua',
 	'config.lua'
 }
+
 server_script 'server/main.lua'
 
 dependencies {

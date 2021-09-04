@@ -5,8 +5,11 @@ Config.RobTime = 10
 Config.Shops = {
     taco = {
         name = 'Taco Party',
-        location = vector3(373.77, 326.09, 103.57),
-        bossLocation = vector3(376.54, 325.46, 103.57),
+        locations = {
+            boss = vector3(376.54, 325.46, 103.57),
+            realEstate = vector3(373.77, 326.09, 103.57),
+            robLocation = vector3(373.1, 329.05, 103.57),
+        },
         price = 1,
         allowedItems = {
             [1] = {
@@ -26,7 +29,6 @@ Config.Shops = {
                 slot = 2
             }
         },
-        robLocation = vector3(373.1, 329.05, 103.57),
         robbed = false,
         cooldown = 10,
         onC = false
