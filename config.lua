@@ -7,8 +7,9 @@ Config.Shops = {
         name = 'Taco Party',
         locations = {
             boss = vector3(376.54, 325.46, 103.57),
-            realEstate = vector3(373.77, 326.09, 103.57),
+            customer = vector3(373.77, 326.09, 103.57),
             robLocation = vector3(373.1, 329.05, 103.57),
+            realEstate = vector3(379.66, 332.57, 103.57),
         },
         price = 1,
         allowedItems = {
