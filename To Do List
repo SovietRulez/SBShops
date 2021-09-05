@@ -1,15 +1,16 @@
-Add civilian coords for purchasing items in config --DONE, Needs inventory BEAR
-Add robbery of each shop by % of players money in shop account
+Add civilian coords for purchasing items in config --DONE
+Add robbery of each shop by % of players money in shop account 
 Add police notification for robbery --DONE
-Add database syncing for all columns
-Add Inventory screening when players try to buy items(like qb-shops)
+Add database syncing for all columns -- MAJORITY DONE
+Add Inventory screening when players try to buy items(like qb-shops) -- DONE, But need to figure way to make amount read database vs config.
+Fix "repo" option on stores. 
+Sync config with "amount" in database
+Add Server side checks on robbery-- DO THIS CLOSE TO LAST, NOT MAJOR
+
+
 
 
 Notes to self
-
+Robbery needs a police check, and the notification sent to only police. Do this last as least important.
 Use Execute and pull all important info as variables into the "string" being executed.(FOR DATABASE SYNCING)
 
-For robbery do a simple In zone Press E and have distance check(Doesnt have to be super advanced for now)
-
-
-Config.Shops[zoneName][zoneData] -- for cooldowns/databse executions
