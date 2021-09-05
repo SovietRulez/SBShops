@@ -34,8 +34,11 @@ QBCore.Functions.CreateCallback('repoShop', function(source, cb, target, globalV
     local result = exports.ghmattimysql:executeSync('SELECT * FROM sbshops WHERE shopName=@shopName', {
         ['@shopName'] = globalVar
     })
-    if result[1] then
-            exports['ghmattimysql']:execute('DELETE citizenid FROM sbshops')
+    --if result[1] then
+            --exports['ghmattimysql']:execute('DELETE citizenid FROM sbshops')
+    --end
+    if result1[1] then -- for test
+            exports['ghmattimysql']:execute('DELETE citizenid FROM sbshops WHERE shopName=@shopName', {['@shopName'] = globalVar})
     end
 end)
 
