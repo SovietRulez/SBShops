@@ -5,16 +5,9 @@ local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0
 local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace2')
 local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace3')
 
--- Management Menu
-local statusButton = menu:AddButton({
-    icon = '😃',
-    label = 'Check Store Status',
-    value = 0,
-    description = 'Checks If Store Is Owned'
-})
 
 -- Account Info Menu
-local repoButton = menu2:AddButton({
+local repoButton = menu3:AddButton({
     icon = '😃',
     label = 'Repossess store',
     value = 0,
@@ -37,28 +30,18 @@ local sellStoreButton = menu3:AddButton({
 
 
 sellStoreButton:On('select', function()
-
-    local target = 1--GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
+    local target = 1 --GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
     local shopInfo = Config.Shops[globalVar]
     print(target)
 QBCore.Functions.TriggerCallback('sellShop', function(cb)
 end, target, globalVar, ShopItems)
 end)
-------------------^^^^ DONT TOUCH DAMN IT
-statusButton:On('select', function()
-    TriggerServerEvent('check')
-    QBCore.Functions.TriggerCallback('check', function(storeOwned)
-        if storeOwned then
-            MenuV:CloseMenu(menu)
-            Citizen.Wait(500)
-            MenuV:OpenMenu(menu2)
-        else
-            MenuV:CloseMenu(menu)
-            Citizen.Wait(500)
-            MenuV:OpenMenu(menu3)
-        end
-    end)
+
+repoButton:On('select', function()
+    QBCore.Functions.TriggerCallback('repoShop', function(cb)
+    end, globalVar)
 end)
+------------------^^^^ DONT TOUCH ANYMORE, 2 DAYS IS ENOUGH XD
 
 ------------------^^^^^^^^^^^^^Menu portion 
 
@@ -135,7 +118,6 @@ Citizen.CreateThread(function()
         Citizen.Wait(5)
     end
 end)
-
 
 RegisterNetEvent('SBShops:openMenuJob')
 AddEventHandler('SBShops:openMenuJob', function(source)
