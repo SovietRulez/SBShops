@@ -30,6 +30,14 @@ local withdrawButton = menu2:AddButton({
     description = 'Withdraw Money'
 })
 
+local depositButton = menu2:AddButton({
+    icon = '😃',
+    label = 'Deposit Money into Account',
+    value = 0,
+    description = 'Deposit Money'
+})
+
+
 -- Shop Sale Menu
 local sellStoreButton = menu3:AddButton({
     icon = '😃',
@@ -48,8 +56,18 @@ TriggerServerEvent('withdraw',tonumber(withdrawAmount), shopInfo)
     end
 end)
 
+depositButton:On('select', function()
+    local src = source
+    local shopInfo = Config.Shops[globalVar]
+    local depositAmount = LocalInput('Deposit Amount', 255, '')
+    if depositAmount ~= nil then
+TriggerServerEvent('deposit',tonumber(depositAmount), shopInfo)
+        print(shopInfo, withdrawAmount)
+    end
+end)
+
 sellStoreButton:On('select', function()
-    local target = 3 -- GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
+    local target = 1 -- GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
     local shopInfo = Config.Shops[globalVar]
 
     print(shopInfo.name, shopInfo.price)
@@ -69,10 +87,9 @@ checkFundsButton:On('select', function()
 end)
 repoButton:On('select', function()
     local shopInfo = Config.Shops[globalVar]
-
     QBCore.Functions.TriggerCallback('repoShop', function(cb)
 
-    end, shopInfo)
+    end, shopInfo.name, globalVar)
 end)
 ------------------^^^^^^^^^^^^^Menu portion 
 
@@ -127,7 +144,7 @@ Citizen.CreateThread(function()
                         end, shopData.name)
                     end
 
-                    -- end
+
                 elseif currentZone == 'realEstate' and QBCore.Functions.GetPlayerData().job.name == Config.Job then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                     if IsControlJustReleased(1, 38) then
