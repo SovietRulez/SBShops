@@ -5,7 +5,6 @@ local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0
 local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace2')
 local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace3')
 
-
 -- Account Info Menu
 local repoButton = menu3:AddButton({
     icon = '😃',
@@ -30,19 +29,18 @@ local sellStoreButton = menu3:AddButton({
 
 
 sellStoreButton:On('select', function()
-    local target = 1 --GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
+    local target = 3 --GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
     local shopInfo = Config.Shops[globalVar]
     print(target)
 QBCore.Functions.TriggerCallback('sellShop', function(cb)
-end, target, globalVar, ShopItems)
+end, target, globalVar)
 end)
 
 repoButton:On('select', function()
+    local shopInfo = Config.Shops[globalVar]
     QBCore.Functions.TriggerCallback('repoShop', function(cb)
-    end, globalVar)
+    end, shopInfo, globalVar)
 end)
-------------------^^^^ DONT TOUCH ANYMORE, 2 DAYS IS ENOUGH XD
-
 ------------------^^^^^^^^^^^^^Menu portion 
 
 Citizen.CreateThread(function()
