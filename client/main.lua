@@ -2,9 +2,12 @@ local seconds = 1000
 local ShopItems = {}
 local globalVar, shopData
 local amt = 0
-local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace')
-local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace2')
-local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace3')
+local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
+    'example_namespace')
+local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
+    'example_namespace2')
+local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
+    'example_namespace3')
 
 -- Account Info Menu
 local repoButton = menu3:AddButton({
@@ -35,16 +38,21 @@ local sellStoreButton = menu3:AddButton({
     description = 'Sells Current Location To Closest Player'
 })
 withdrawButton:On('select', function()
-    --local src = source
+    local src = source
     local shopInfo = Config.Shops[globalVar]
-    TriggerServerEvent('withdraw', source, cb, shopInfo)
+    local withdrawAmount = LocalInput('Withdrawal Amount', 255, '')
+    if withdrawAmount ~= nil then
+        QBCore.Functions.TriggerCallback('withdraw', function(cb)
+
+        end, withdrawAmount, shopInfo)
+        print(shopInfo, withdrawAmount)
+    end
 end)
 
-
 sellStoreButton:On('select', function()
-    local target = 2 --GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
+    local target = 3 -- GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
     local shopInfo = Config.Shops[globalVar]
-    
+
     print(shopInfo.name, shopInfo.price)
 
     QBCore.Functions.TriggerCallback('sellShop', function(cb)
@@ -62,7 +70,7 @@ checkFundsButton:On('select', function()
 end)
 repoButton:On('select', function()
     local shopInfo = Config.Shops[globalVar]
-    
+
     QBCore.Functions.TriggerCallback('repoShop', function(cb)
 
     end, shopInfo)
@@ -103,7 +111,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if currentZone == 'boss' then
-                    DrawText3D(shopData.locations[currentZone], "~g~ Boss Menu" )
+                    DrawText3D(shopData.locations[currentZone], "~g~ Boss Menu")
                     if IsControlJustReleased(1, 38) then
                         QBCore.Functions.TriggerCallback('isOwner', function(cb)
                             if cb then
@@ -114,12 +122,13 @@ Citizen.CreateThread(function()
                                 print('you da boss')
                             else
                                 print('you not the boss bro')
-                                QBCore.Functions.Notify(string.format("You must contact store owner or %s for assistance", Config.Job), 'error', 5000)
+                                QBCore.Functions.Notify(string.format(
+                                    "You must contact store owner or %s for assistance", Config.Job), 'error', 5000)
                             end
                         end, shopData.name)
                     end
 
-                   -- end
+                    -- end
                 elseif currentZone == 'realEstate' and QBCore.Functions.GetPlayerData().job.name == Config.Job then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                     if IsControlJustReleased(1, 38) then
@@ -134,7 +143,7 @@ Citizen.CreateThread(function()
                         ShopItems.label = Config.Shops[shopName]["name"]
                         ShopItems.items = Config.Shops[shopName]["allowedItems"]
                         ShopItems.slots = 10
-                        TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shopName, ShopItems)
+                        TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_" .. shopName, ShopItems)
                     end
                 elseif currentZone == 'robLocation' then
                     if not shopData.onC then
@@ -167,7 +176,6 @@ AddEventHandler('SBShops:openMenuJob', function(source)
     end
 end)
 
-
 function DrawText3D(coords, text)
     SetTextScale(0.35, 0.35)
     SetTextFont(4)
@@ -181,6 +189,18 @@ function DrawText3D(coords, text)
     local factor = (string.len(text)) / 370
     DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
     ClearDrawOrigin()
+end
+function LocalInput(text, number, windows)
+    AddTextEntry("FMMC_MPM_NA", text)
+    DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", windows or "", "", "", "", number or 30)
+    while (UpdateOnscreenKeyboard() == 0) do
+        DisableAllControlActions(0)
+        Wait(0)
+    end
+    if (GetOnscreenKeyboardResult()) then
+        local result = GetOnscreenKeyboardResult()
+        return result
+    end
 end
 
 function Robbery(shopName, shopData)
@@ -201,6 +221,21 @@ function Robbery(shopName, shopData)
     TriggerServerEvent('wf-alerts:svNotify', dispatchData)
     Citizen.Wait(Config.RobTime * seconds)
     Cooldown(shopName)
+end
+function UpdateShop()
+    QBCore.Functions.TriggerCallback('accountAmount', function(cb)
+        menu_button5.Label = 'Shop Amount: $' .. comma_value(cb)
+    end)
+end
+function comma_value(amount)
+    local formatted = amount
+    while true do
+        formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+        if (k == 0) then
+            break
+        end
+    end
+    return formatted
 end
 
 function Cooldown(shopName, shopData)
