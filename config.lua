@@ -42,7 +42,7 @@ Config.Shops = {
             robLocation = vector3(24.4, -1344.09, 29.5),
             realEstate = vector3(30.33, -1339.35, 29.5)
         },
-        price = 1,
+        price = 1000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',

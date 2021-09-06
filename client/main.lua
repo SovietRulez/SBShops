@@ -87,6 +87,7 @@ Citizen.CreateThread(function()
 
                     end
                 elseif currentZone == 'realEstate' then
+                elseif currentZone == 'realEstate' and QBCore.Functions.GetPlayerData().job.name == Config.Job then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                     if IsControlJustReleased(1, 38) then
                         globalVar = shopName
