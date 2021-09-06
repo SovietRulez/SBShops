@@ -1,6 +1,6 @@
 local seconds = 1000
 local ShopItems = {}
-local globalVar = 'nil'
+local globalVar, shopData
 local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace')
 local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace2')
 local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv', 'example_namespace3')
@@ -12,6 +12,7 @@ local repoButton = menu3:AddButton({
     value = 0,
     description = 'Repo Current Store Location'
 })
+
 local checkFundsButton = menu2:AddButton({
     icon = '😃',
     label = 'Check Account Funds',
@@ -22,11 +23,10 @@ local checkFundsButton = menu2:AddButton({
 -- Shop Sale Menu
 local sellStoreButton = menu3:AddButton({
     icon = '😃',
-    label = 'Sell To Nearby Player',
+    label = 'placeholder',
     value = 0,
     description = 'Sells Current Location To Closest Player'
 })
-
 
 sellStoreButton:On('select', function()
     local target = 3 --GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
@@ -35,11 +35,13 @@ sellStoreButton:On('select', function()
     print(shopInfo.name, shopInfo.price)
 
     QBCore.Functions.TriggerCallback('sellShop', function(cb)
+
     end, target, globalVar)
 end)
 
 repoButton:On('select', function()
     local shopInfo = Config.Shops[globalVar]
+    
     QBCore.Functions.TriggerCallback('repoShop', function(cb)
 
     end, shopInfo, globalVar)
@@ -88,7 +90,9 @@ Citizen.CreateThread(function()
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                     if IsControlJustReleased(1, 38) then
                         globalVar = shopName
+                        shopData = shopData
                         MenuV:OpenMenu(menu3, globalVar)
+                        sellStoreButton.Label = string.format('Sell Store to Player ($%s)', shopData.price)
                     end
                 elseif currentZone == 'customer' then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Shop Here')
