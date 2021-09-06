@@ -85,19 +85,32 @@ QBCore.Functions.CreateCallback('accountAmount', function(source, cb, shopInfo, 
 end)
 
 
-QBCore.Functions.CreateCallback('withdraw', function(source, cb, shopInfo, withdrawAmount)
+
+RegisterServerEvent('withdraw')
+AddEventHandler('withdraw', function(withdrawAmount, shopInfo)
     local src = source
+    local plyLoc = GetEntityCoords(GetPlayerPed(src))
+    local spotLoc = #(shopInfo.locations.boss-plyLoc)
+    local Player = QBCore.Functions.GetPlayer(src)
     local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
     local result = exports.ghmattimysql:executeSync('SELECT * FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', {
         ['@shopName'] = shopInfo.name,
         ['@citizenid'] = cid,
+        ['@accountMoney'] = 0
     })
-    local amt = result[1].accountMoney
-    print(json.encode(result[1].accountMoney))
-    if result[1].accountMoney then
-        TriggerClientEvent("QBCore:Notify", src, string.format("Shop money is $%s ", amt), "success", 5000)
-        cb(true)
+    if spotLoc < 2 then
+    if result[1].accountMoney >= withdrawAmount then
+        exports.ghmattimysql:execute('UPDATE sbshops SET accountMoney = accountMoney - @withdrawAmount WHERE shopName=@shopName', {
+            ['@shopName'] = shopInfo.name,
+            ['@withdrawAmount'] = withdrawAmount
+        }, function()
+            TriggerClientEvent("QBCore:Notify", src, string.format("%s has withdrawn %s", shopInfo.name, withdrawAmount),"success", 5000)
+            Player.Functions.AddMoney('bank', withdrawAmount)
+        end)
     else
-        cb(false)
+        TriggerClientEvent("QBCore:Notify", src,string.format("%s Doesnt have that kind of bread!", shopInfo.name), "error", 5000)
     end
+else
+    TriggerClientEvent("QBCore:Notify", src,string.format(" Player is not near %s", shopInfo.name), "error", 5000)
+end
 end)
