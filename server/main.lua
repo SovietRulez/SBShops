@@ -24,22 +24,19 @@ QBCore.Functions.CreateCallback('sellShop', function(source, cb, target, globalV
         end
     end
 end)
-------------SELL SHOP----------------^^^^^^^^^^^^^^^^^^^ DONT TOUCH ANYMORE THIS IS FINISHED
-
 
 QBCore.Functions.CreateCallback('repoShop', function(source, cb, target, globalVar)
     local src = source
-    local targetPlayer = QBCore.Functions.GetPlayer(target).PlayerData
-    local targetCID = targetPlayer.citizenid
+    TriggerClientEvent("QBCore:Notify", src, string.format(globalVar.. " has been reposessed"), "success", 5000)
     local result = exports.ghmattimysql:executeSync('SELECT * FROM sbshops WHERE shopName=@shopName', {
         ['@shopName'] = globalVar
     })
-    --if result[1] then
-            --exports['ghmattimysql']:execute('DELETE citizenid FROM sbshops')
-    --end
-    if result1[1] then -- for test
-            exports['ghmattimysql']:execute('DELETE citizenid FROM sbshops WHERE shopName=@shopName', {['@shopName'] = globalVar})
+    print(result[1])
+    if result[1] then
+        exports.ghmattimysql:execute('UPDATE sbshops SET citizenid = NULL WHERE shopName=@shopName', {
+            ['@shopName'] = globalVar
+        })
     end
 end)
 
---^ Callback above is broken. Remember!
+--------------------------DONE ABOVE, NEED TO ADD $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ ----------------------------------------------------
