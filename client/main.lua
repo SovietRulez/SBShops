@@ -37,14 +37,13 @@ local sellStoreButton = menu3:AddButton({
     value = 0,
     description = 'Sells Current Location To Closest Player'
 })
+
 withdrawButton:On('select', function()
     local src = source
     local shopInfo = Config.Shops[globalVar]
     local withdrawAmount = LocalInput('Withdrawal Amount', 255, '')
     if withdrawAmount ~= nil then
-        QBCore.Functions.TriggerCallback('withdraw', function(cb)
-
-        end, withdrawAmount, shopInfo)
+TriggerServerEvent('withdraw',tonumber(withdrawAmount), shopInfo)
         print(shopInfo, withdrawAmount)
     end
 end)
