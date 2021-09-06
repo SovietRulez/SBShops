@@ -25,8 +25,7 @@ QBCore.Functions.CreateCallback('sellShop', function(source, cb, target, shopInf
             local player = QBCore.Functions.GetPlayerByCitizenId(result[1].citizenid)
             local firstname = player.PlayerData.charinfo.firstname
             local lastname = player.PlayerData.charinfo.lastname
-            TriggerClientEvent("QBCore:Notify", src, string.format("Shop owned by %s %s", firstname, lastname), "error",
-                5000)
+            TriggerClientEvent("QBCore:Notify", src, string.format("Shop owned by %s %s", firstname, lastname), "error", 5000)
         end
     elseif Player.PlayerData.money.bank < shopInfo.price then
         TriggerClientEvent("QBCore:Notify", src, string.format("Client is to broke to pay"), "error", 5000)
@@ -46,9 +45,60 @@ QBCore.Functions.CreateCallback('repoShop', function(source, cb, target, shopInf
                 TriggerClientEvent("QBCore:Notify", src, string.format("%s has been reposessed", shopInfo.name),"success", 5000)
             end)
         else
-            TriggerClientEvent("QBCore:Notify", src,
-                string.format("%s could not be reposessed, beause it's not owned!", shopInfo.name), "error", 5000)
+            TriggerClientEvent("QBCore:Notify", src,string.format("%s could not be reposessed, beause it's not owned!", shopInfo.name), "error", 5000)
         end
     end
 end)
 
+
+QBCore.Functions.CreateCallback('isOwner', function(source, cb, shopname)
+    local src = source
+    local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
+    local result = exports.ghmattimysql:executeSync('SELECT * FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', {
+        ['@shopName'] = shopname,
+        ['@citizenid'] = cid
+    })
+    if result[1] then
+        cb(true)
+    else
+        cb(false)
+    end
+end)
+
+
+QBCore.Functions.CreateCallback('accountAmount', function(source, cb, shopInfo, amt)
+    local src = source
+    local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
+    local result = exports.ghmattimysql:executeSync('SELECT * FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', {
+        ['@shopName'] = shopInfo.name,
+        ['@citizenid'] = cid,
+    })
+    local amt = result[1].accountMoney
+    print(json.encode(result[1].accountMoney))
+    if result[1].accountMoney then
+        TriggerClientEvent("QBCore:Notify", src, string.format("Shop money is $%s ", amt), "success", 5000)
+       -- cb = amt
+        cb(true)
+    else
+        cb(false)
+    end
+end)
+
+RegisterServerEvent('withdraw')
+AddEventHandler('withdraw', function(source, cb, shopInfo)
+    local src = source
+    local result = exports.ghmattimysql:executeSync('SELECT * FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', {
+        ['@shopName'] = shopInfo.name,
+        ['@citizenid'] = cid,
+    })
+    --local amt = result[1].accountMoney
+  --  print(json.encode(result[1].accountMoney))
+    if result[1].accountMoney then
+        print(shopInfo.accountMoney)
+        src.Functions.AddMoney('cash', shopInfo.accountMoney)
+        exports.ghmattimysql:execute('UPDATE sbshops SET accountMoney = 0 WHERE shopName=@shopName', {
+            ['@shopName'] = shopInfo.name
+        })
+        print(result[1].accountMoney)
+    end
+end)
