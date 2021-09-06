@@ -1,3 +1,6 @@
+local src = source
+local Player3 = QBCore.Functions.GetPlayer(src)
+
 QBCore.Functions.CreateCallback('sellShop', function(source, cb, target, shopInfo)
     local src = source
     local Player = QBCore.Functions.GetPlayer(target)
@@ -50,7 +53,6 @@ QBCore.Functions.CreateCallback('repoShop', function(source, cb, target, shopInf
     end
 end)
 
-
 QBCore.Functions.CreateCallback('isOwner', function(source, cb, shopname)
     local src = source
     local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
@@ -65,7 +67,6 @@ QBCore.Functions.CreateCallback('isOwner', function(source, cb, shopname)
     end
 end)
 
-
 QBCore.Functions.CreateCallback('accountAmount', function(source, cb, shopInfo, amt)
     local src = source
     local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
@@ -77,28 +78,26 @@ QBCore.Functions.CreateCallback('accountAmount', function(source, cb, shopInfo, 
     print(json.encode(result[1].accountMoney))
     if result[1].accountMoney then
         TriggerClientEvent("QBCore:Notify", src, string.format("Shop money is $%s ", amt), "success", 5000)
-       -- cb = amt
         cb(true)
     else
         cb(false)
     end
 end)
 
-RegisterServerEvent('withdraw')
-AddEventHandler('withdraw', function(source, cb, shopInfo)
+
+QBCore.Functions.CreateCallback('withdraw', function(source, cb, shopInfo, withdrawAmount)
     local src = source
+    local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
     local result = exports.ghmattimysql:executeSync('SELECT * FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', {
         ['@shopName'] = shopInfo.name,
         ['@citizenid'] = cid,
     })
-    --local amt = result[1].accountMoney
-  --  print(json.encode(result[1].accountMoney))
+    local amt = result[1].accountMoney
+    print(json.encode(result[1].accountMoney))
     if result[1].accountMoney then
-        print(shopInfo.accountMoney)
-        src.Functions.AddMoney('cash', shopInfo.accountMoney)
-        exports.ghmattimysql:execute('UPDATE sbshops SET accountMoney = 0 WHERE shopName=@shopName', {
-            ['@shopName'] = shopInfo.name
-        })
-        print(result[1].accountMoney)
+        TriggerClientEvent("QBCore:Notify", src, string.format("Shop money is $%s ", amt), "success", 5000)
+        cb(true)
+    else
+        cb(false)
     end
 end)
