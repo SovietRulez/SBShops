@@ -31,14 +31,17 @@ local sellStoreButton = menu3:AddButton({
 sellStoreButton:On('select', function()
     local target = 3 --GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
     local shopInfo = Config.Shops[globalVar]
-    print(target)
-QBCore.Functions.TriggerCallback('sellShop', function(cb)
-end, target, globalVar)
+    
+    print(shopInfo.name, shopInfo.price)
+
+    QBCore.Functions.TriggerCallback('sellShop', function(cb)
+    end, target, globalVar)
 end)
 
 repoButton:On('select', function()
     local shopInfo = Config.Shops[globalVar]
     QBCore.Functions.TriggerCallback('repoShop', function(cb)
+
     end, shopInfo, globalVar)
 end)
 ------------------^^^^^^^^^^^^^Menu portion 
@@ -84,7 +87,7 @@ Citizen.CreateThread(function()
                 elseif currentZone == 'realEstate' then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                     if IsControlJustReleased(1, 38) then
-                        globalVar = shopData.name
+                        globalVar = shopName
                         MenuV:OpenMenu(menu3, globalVar)
                     end
                 elseif currentZone == 'customer' then
