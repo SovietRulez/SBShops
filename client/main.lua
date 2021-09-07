@@ -37,7 +37,6 @@ local depositButton = menu2:AddButton({
     description = 'Deposit Money'
 })
 
-
 -- Shop Sale Menu
 local sellStoreButton = menu3:AddButton({
     icon = '😃',
@@ -51,7 +50,7 @@ withdrawButton:On('select', function()
     local shopInfo = Config.Shops[globalVar]
     local withdrawAmount = LocalInput('Withdrawal Amount', 255, '')
     if withdrawAmount ~= nil then
-TriggerServerEvent('withdraw',tonumber(withdrawAmount), shopInfo)
+        TriggerServerEvent('withdraw', tonumber(withdrawAmount), shopInfo)
         print(shopInfo, withdrawAmount)
     end
 end)
@@ -61,7 +60,7 @@ depositButton:On('select', function()
     local shopInfo = Config.Shops[globalVar]
     local depositAmount = LocalInput('Deposit Amount', 255, '')
     if depositAmount ~= nil then
-TriggerServerEvent('deposit',tonumber(depositAmount), shopInfo)
+        TriggerServerEvent('deposit', tonumber(depositAmount), shopInfo)
         print(shopInfo, withdrawAmount)
     end
 end)
@@ -143,8 +142,6 @@ Citizen.CreateThread(function()
                             end
                         end, shopData.name)
                     end
-
-
                 elseif currentZone == 'realEstate' and QBCore.Functions.GetPlayerData().job.name == Config.Job then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                     if IsControlJustReleased(1, 38) then
@@ -162,7 +159,7 @@ Citizen.CreateThread(function()
                         TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_" .. shopName, ShopItems)
                     end
                 elseif currentZone == 'robLocation' then
-                    if not shopData.onC then
+                    if not shopData.onC and not robbed then
                         DrawText3D(shopData.locations[currentZone], "~r~ Rob store ~w~" .. shopData.name)
                     else
                         DrawText3D(shopData.locations[currentZone], "~r~ Store on cooldown")
@@ -183,15 +180,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent('SBShops:openMenuJob')
-AddEventHandler('SBShops:openMenuJob', function(source)
-    if QBCore.Functions.GetPlayerData().job.name == Config.Job then
-        MenuV:OpenMenu(menu)
-    else
-        QBCore.Functions.Notify("You're not apart of " .. Config.Job, 'error', 5000)
-    end
-end)
-
 function DrawText3D(coords, text)
     SetTextScale(0.35, 0.35)
     SetTextFont(4)
@@ -206,6 +194,7 @@ function DrawText3D(coords, text)
     DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
     ClearDrawOrigin()
 end
+
 function LocalInput(text, number, windows)
     AddTextEntry("FMMC_MPM_NA", text)
     DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", windows or "", "", "", "", number or 30)
@@ -237,12 +226,9 @@ function Robbery(shopName, shopData)
     TriggerServerEvent('wf-alerts:svNotify', dispatchData)
     Citizen.Wait(Config.RobTime * seconds)
     Cooldown(shopName)
+    isBusy = false
 end
-function UpdateShop()
-    QBCore.Functions.TriggerCallback('accountAmount', function(cb)
-        menu_button5.Label = 'Shop Amount: $' .. comma_value(cb)
-    end)
-end
+
 function comma_value(amount)
     local formatted = amount
     while true do
@@ -256,10 +242,10 @@ end
 
 function Cooldown(shopName, shopData)
     Citizen.CreateThread(function()
-        isBusy = true
+        --isBusy = true
         Config.Shops[shopName].onC = true
         Wait(Config.Shops[shopName].cooldown * seconds)
         Config.Shops[shopName].onC = false
-        isBusy = false
+        --isBusy = false
     end)
 end
