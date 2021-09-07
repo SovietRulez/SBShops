@@ -2,6 +2,7 @@ local seconds = 1000
 local ShopItems = {}
 local globalVar, shopData
 local amt = 0
+deathTime = 0
 local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
     'example_namespace')
 local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
@@ -164,12 +165,13 @@ Citizen.CreateThread(function()
                     else
                         DrawText3D(shopData.locations[currentZone], "~r~ Store on cooldown")
                     end
-                    if IsControlJustReleased(1, 38) then
+                    if IsControlJustReleased(1, 38)  and not shopData.onC then
                         Config.Shops[shopName].robbed = true
                         print(shopName)
                         print(shopData)
                         print(shopData.allowedItems)
                         isBusy = true
+                        deathTime = Config.RobTime 
                         Robbery(shopName, shopData)
                         isBusy = false
                     end
@@ -179,6 +181,34 @@ Citizen.CreateThread(function()
         Citizen.Wait(5)
     end
 end)
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(1000)
+        deathTime = deathTime - 1
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(1)
+        if deathTime > 0 then
+            DrawTxt(0.93, 1.44, 1.0,1.0,0.6, "Shop is being robbed for ~r~" .. math.ceil(deathTime) .. "~w~ more seconds", 255, 255, 255, 255)
+        end
+    end
+end)
+function DrawTxt(x, y, width, height, scale, text, r, g, b, a, outline)
+    SetTextFont(4)
+    SetTextProportional(0)
+    SetTextScale(scale, scale)
+    SetTextColour(r, g, b, a)
+    SetTextDropShadow(0, 0, 0, 0,255)
+    SetTextEdge(2, 0, 0, 0, 255)
+    SetTextDropShadow()
+    SetTextOutline()
+    SetTextEntry("STRING")
+    AddTextComponentString(text)
+    DrawText(x - width/2, y - height/2 + 0.005)
+end
 
 function DrawText3D(coords, text)
     SetTextScale(0.35, 0.35)
