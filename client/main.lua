@@ -3,12 +3,10 @@ local ShopItems = {}
 local globalVar, shopData
 local amt = 0
 deathTime = 0
-local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
-    'example_namespace')
-local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
-    'example_namespace2')
-local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv',
-    'example_namespace3')
+local menu = MenuV:CreateMenu(false, 'Shop Management', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv','space')
+local menu2 = MenuV:CreateMenu(false, 'Shop Account Information', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv','space2')
+local menu3 = MenuV:CreateMenu(false, 'Shop Sale', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv','space3')
+local menu4 = MenuV:CreateMenu(false, 'Shop Ordering', 'centerright', 255, 0, 0, 'size-125', 'test', 'menuv','space4')
 
 -- Account Info Menu
 local repoButton = menu3:AddButton({
@@ -45,6 +43,22 @@ local sellStoreButton = menu3:AddButton({
     value = 0,
     description = 'Sells Current Location To Closest Player'
 })
+
+local orderingButton = menu2:AddButton({
+    icon = '😃',
+    label = 'Ordering System',
+    value = 0,
+    description = 'Open Inventory Ordering System'
+})
+local slider = menu4:AddSlider({ icon = '❤️', label = 'Ordering Items', value = 'demo', values = {
+    { label = 'Sandwichs', value = 'sandwich', description = 'Place Order For sandwiches' },
+    { label = 'Lockpick', value = 'lockpick', description = 'Place Order For lockpicks' }
+
+}})
+
+orderingButton:On('select', function()
+    MenuV:OpenMenu(menu4)
+end)
 
 withdrawButton:On('select', function()
     local src = source
