@@ -147,7 +147,7 @@ AddEventHandler('deposit', function(depositAmount, shopInfo)
     end
 end)
 
-
+-- passt = slot, price = item price, passthis is item name, shopInfo = shop name, purchaseAmount is price * item quantity
 RegisterServerEvent('test')
 AddEventHandler('test', function(purchaseAmount, shopInfo, passThis, priceToPass, passt)
     local src = source
@@ -168,6 +168,7 @@ AddEventHandler('test', function(purchaseAmount, shopInfo, passThis, priceToPass
         'SELECT * FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', {
             ['@shopName'] = shopInfo.name,
             ['@citizenid'] = cid
+            
             
         })
     if spotLoc < 2 then
