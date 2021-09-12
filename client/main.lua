@@ -103,7 +103,6 @@ Citizen.CreateThread(function()
             local player = PlayerPedId()
             local playerPos = GetEntityCoords(player)
             for shopName, shopData in pairs(Config.Shops) do
-                local products = Config.Shops[shopName].allowedItems
                 for locationName, locationCoords in pairs(shopData.locations) do
                     local distance = #(playerPos - locationCoords)
                     if not isInMarker and currentZone == nil then
@@ -121,20 +120,18 @@ Citizen.CreateThread(function()
                 if currentZone == 'boss' then
                     DrawText3D(shopData.locations[currentZone], "~g~ Boss Menu")
                     if IsControlJustReleased(1, 38) then
-                        isBusy = true
                         QBCore.Functions.TriggerCallback('isOwner', function(cb)
                             if cb then
+                                menu4:ClearItems()
                                 globalVar = shopName
                                 shopData = shopData
                                 itemsAllowed = shopData.allowedItems
                                 itemNames = itemsAllowed.name
                                 for i = 1, #itemsAllowed do
-
                                     if itemsAllowed[i].name == itemsAllowed[i].name then
-
                                         local orderingButton = menu4:AddButton({
                                             icon = '😃',
-                                            label = string.format('Order %s $%s', itemsAllowed[i].name,itemsAllowed[i].price),
+                                            label = string.format('Order %s $%s', itemsAllowed[i].name, itemsAllowed[i].price),
                                             value = itemsAllowed[i].name,
                                             description = string.format('Place order for %s', itemsAllowed[i].name)
                                         })
@@ -149,13 +146,18 @@ Citizen.CreateThread(function()
                                             local passt = Config.Shops[globalVar].allowedItems[asd].slot
                                             local purchaseAmount = LocalInput('Purchase Amount', 255, '')
                                             if purchaseAmount ~= nil then
-                                                print(json.encode(Config.Shops[globalVar].allowedItems[asd].slot))
-                                                TriggerServerEvent('test', tonumber(purchaseAmount), shopInfo, passThis, priceToPass, passt)
+                                                MenuV:CloseMenu(menu4)
+                                                local sellPrice = LocalInput(string.format('%s price per unit', passThis), 255, '')
+                                                if sellPrice ~= nil then
+                                                        MenuV:CloseMenu(menu4)
+                                                        print(json.encode(Config.Shops[globalVar].allowedItems[asd].slot))
+                                                        TriggerServerEvent('test', tonumber(purchaseAmount), shopInfo, passThis, priceToPass, passt, sellPrice)
+                                                    end
                                             end
                                         end)
                                     end
-                                    MenuV:OpenMenu(menu4, globalVar, amt)
                                 end
+                                MenuV:OpenMenu(menu4, globalVar, amt)
                                 checkFundsButton.Label = string.format('Check Account Balance')
                             else
                                 QBCore.Functions.Notify(string.format("You must contact store owner or %s for assistance", Config.Job), 'error', 5000)
@@ -165,7 +167,7 @@ Citizen.CreateThread(function()
                 elseif currentZone == 'realEstate' and QBCore.Functions.GetPlayerData().job.name == Config.Job then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                     if IsControlJustReleased(1, 38) then
-                        isBusy = true
+                        
                         globalVar = shopName
                         shopData = shopData
                         MenuV:OpenMenu(menu3, globalVar)
@@ -174,11 +176,12 @@ Citizen.CreateThread(function()
                 elseif currentZone == 'customer' then
                     DrawText3D(shopData.locations[currentZone], "~g~" .. 'Shop Here')
                     if IsControlJustReleased(1, 38) then
-                        isBusy = true
-                        ShopItems.label = Config.Shops[shopName]["name"]
-                        ShopItems.items = Config.Shops[shopName]["allowedItems"]
-                        ShopItems.slots = 10
-                        TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_" .. shopName, ShopItems)
+                        QBCore.Functions.TriggerCallback('SBShops:GetShopInvData', function(cb)
+                            ShopItems.label = Config.Shops[shopName].name
+                            ShopItems.items = cb
+                            ShopItems.slots = 10
+                            TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_" .. shopName, ShopItems, shopData)
+                        end, Config.Shops[shopName].name)
                     end
                 elseif currentZone == 'robLocation' then
                     if not shopData.onC and not robbed then
@@ -188,7 +191,7 @@ Citizen.CreateThread(function()
                     end
                     if IsControlJustReleased(1, 38) and not shopData.onC then
                         Config.Shops[shopName].robbed = true
-                        isBusy = true
+                        
                         deathTime = Config.RobTime
                         Robbery(shopName, shopData)
                         isBusy = false
