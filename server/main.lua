@@ -147,44 +147,53 @@ AddEventHandler('deposit', function(depositAmount, shopInfo)
     end
 end)
 
--- passt = slot, price = item price, passthis is item name, shopInfo = shop name, purchaseAmount is price * item quantity
 RegisterServerEvent('test')
-AddEventHandler('test', function(purchaseAmount, shopInfo, passThis, priceToPass, passt)
+AddEventHandler('test', function(itemQuantity, shopName, itemName, itemPrice, slotID, sellPrice)
     local src = source
     local plyLoc = GetEntityCoords(GetPlayerPed(src))
-    local spotLoc = #(shopInfo.locations.boss - plyLoc)
+    local spotLoc = #(shopName.locations.boss - plyLoc)
     local Player = QBCore.Functions.GetPlayer(src)
     local cid = Player.PlayerData.citizenid
     local money = Player.PlayerData.money['cash']
-    local moneyAmount = priceToPass * purchaseAmount
-    local items = {}
-    print(passt)
-    table.insert(items, {
-        name = passThis,
-        amount = purchaseAmount,
-        slot = passt,
-    })
-    local result = exports.ghmattimysql:executeSync(
-        'SELECT * FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', {
-            ['@shopName'] = shopInfo.name,
-            ['@citizenid'] = cid
-            
-            
+    local moneyAmount = itemPrice * itemQuantity
+    local items = json.decode(exports.ghmattimysql:scalarSync('SELECT items FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', { ['@shopName'] = shopName.name, ['@citizenid'] = cid }))
+    if not items then items = {} end
+    if #items == 0 then
+        table.insert(items, {
+            name = itemName,
+            amount = itemQuantity,
+            slot = slotID,
+            price = sellPrice
         })
-    if spotLoc < 2 then
-        if result[1] and money >= moneyAmount then
-            exports.ghmattimysql:execute('UPDATE sbshops SET items = @items WHERE shopName=@shopName', {
-                    ['@shopName'] = shopInfo.name,
-                    ['@items'] = json.encode(items)
-                }, function()
-                    TriggerClientEvent("QBCore:Notify", src, string.format("You have bought %s  %s worth $%s for store %s",purchaseAmount, passThis, moneyAmount, shopInfo.name), "success", 5000)
-                    Player.Functions.RemoveMoney('cash', moneyAmount)
-                end)
-        else
-            TriggerClientEvent("QBCore:Notify", src, string.format("You dont have that amount of bread holmes!"), "error", 5000)
-        end
     else
-        DropPlayer(src, "Cheaters are not welcome here")
+        local result
+        for k, v in pairs(items) do
+            if v.name == itemName then
+                result = true
+                v.amount = v.amount + itemQuantity
+                v.price = v.price
+            end
+        end
+        if not result then
+            table.insert(items, {
+                name = itemName,
+                amount = itemQuantity,
+                slot = slotID,
+                price = sellPrice
+            })
+        end
     end
+
+    exports.ghmattimysql:execute('UPDATE sbshops SET items = @items WHERE shopName=@shopName', {
+        ['@shopName'] = shopName.name,
+        ['@items'] = json.encode(items)
+    }, function()
+        TriggerClientEvent("QBCore:Notify", src, string.format("You have bought %s %s worth $%s for store %s", itemQuantity, itemName, moneyAmount, shopName.name), "success", 5000)
+        Player.Functions.RemoveMoney('cash', moneyAmount)
+    end)
 end)
 
+QBCore.Functions.CreateCallback('SBShops:GetShopInvData', function(source, cb, shopName)
+    local items = exports.ghmattimysql:scalarSync('SELECT items FROM sbshops WHERE shopName=@shopName', { ['@shopName'] = shopName })
+    cb(json.decode(items))
+end)
