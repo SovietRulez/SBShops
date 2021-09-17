@@ -115,27 +115,27 @@ AddEventHandler('withdraw', function(withdrawAmount, shopInfo)
         DropPlayer(src, "Cheaters are not welcome here")
     end
 end)
-RegisterNetEvent('robberyAmount', function(shopData)
+RegisterNetEvent('robberyAmount', function(globalVar)
     local src = source
     local plyLoc = GetEntityCoords(GetPlayerPed(src))
-    local spotLoc = #(shopData.locations.robLocation - plyLoc)
+    local spotLoc = #(globalVar.locations.robLocation - plyLoc)
     local Player = QBCore.Functions.GetPlayer(src)
     local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
     local result = exports.ghmattimysql:executeSync(
         'SELECT * FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', {
-            ['@shopName'] = shopData.name,
+            ['@shopName'] = globalVar.name,
             ['@citizenid'] = cid,
             ['@accountMoney'] = 0
         })
     if spotLoc < 2 then
         exports.ghmattimysql:execute('UPDATE sbshops SET accountMoney = @acctMny WHERE shopName=@shopName', {
-            ['@shopName'] = shopData.name,
+            ['@shopName'] = globalVar.name,
             ['@acctMny'] = result[1].accountMoney - result[1].accountMoney / Config.Percent
         }, function()
             local val = result[1].accountMoney / Config.Percent
 
             TriggerClientEvent("QBCore:Notify", src,
-                string.format("You have taken %s dollars from %s", math.ceil(val), shopData.name), "success", 5000)
+                string.format("You have taken %s dollars from %s", math.ceil(val), globalVar.name), "success", 5000)
             Player.Functions.AddMoney('cash', result[1].accountMoney / Config.Percent)
         end)
     end
