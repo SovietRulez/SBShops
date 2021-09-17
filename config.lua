@@ -1,7 +1,9 @@
 Config = {}
-Config.Job = 'realestate'
-Config.QBTarget = false -- CHANGE IF YOU USE qb-Target
-Config.RobTime = 10
+Config.Job = 'realestate' -- JOB FOR SALE/REPO
+Config.QBTarget = false -- NOT USED CURRENTLY, PLANNED
+Config.RobTime = 10 -- TIME FOR ROBBERY
+Config.Percent = 10 -- PERCENT TO ROB
+Config.CopsRequired = 0
 Config.Shops = {
     taco = {
         name = 'Taco Party',
@@ -15,27 +17,29 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
+                price = 10,
                 amount = 10,
-                -- type = 'item',
-                -- info = {},
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 100,
+                amount = 100,
                 slot = 2
+            },
+            [3] = {
+                name = 'weed_skunk',
+                price = 10,
+                amount = 100,
+                slot = 3
             }
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 10, --ROBBERY COOLDOWN
         onC = false
     },
     nacho = {
-        name = 'Nacho Party',
+        name = 'SovietRulez',
         locations = {
             boss = vector3(27.32, -1343.27, 29.5),
             customer = vector3(25.65, -1346.05, 29.5),
@@ -46,19 +50,21 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
+            },
+            [3] = {
+                name = 'repairkit',
+                price = 10,
+                amount = 100,
+                slot = 3
             }
         },
         robbed = false,
@@ -77,18 +83,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -104,22 +106,18 @@ Config.Shops = {
             robLocation = vector3(-1484.69, -379.05, 40.16),
             realEstate = vector3(-1479.43, -372.66, 39.16)
         },
-        price = 1,
+        price = 1, -- PRICE FOR STORE
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -139,18 +137,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -170,18 +164,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -201,18 +191,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -232,18 +218,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -263,18 +245,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -294,18 +272,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -325,18 +299,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -356,18 +326,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -387,18 +353,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -418,18 +380,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -449,18 +407,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -480,18 +434,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
@@ -511,18 +461,14 @@ Config.Shops = {
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 1
             },
             [2] = {
                 name = 'lockpick',
-                price = 0,
-                amount = 10,
-                -- type = 'item',
-                -- info = {},
+                price = 10,
+                amount = 100,
                 slot = 2
             }
         },
