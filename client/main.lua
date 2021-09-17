@@ -71,7 +71,7 @@ depositButton:On('select', function()
 end)
 
 sellStoreButton:On('select', function()
-    local target = 3 -- GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
+    local target = 1 -- GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
     local shopInfo = Config.Shops[globalVar]
 
     QBCore.Functions.TriggerCallback('sellShop', function(cb)
@@ -205,7 +205,7 @@ function OpenMenu(currentZone)
                 if cops >= Config.CopsRequired then
                     Config.Shops[globalVar].robbed = true
                     robberyTimer = Config.RobTime
-                    Robbery(shopName, shopData)
+                    Robbery(globalVar, shopData)
                     Citizen.Wait(robberyTimer)
                     TriggerServerEvent('robberyAmount', Config.Shops[globalVar])
                     isBusy = false
@@ -276,7 +276,7 @@ function LocalInput(text, number, windows)
     end
 end
 
-function Robbery(shopName, shopData)
+function Robbery(globalVar, shopData)
     local data = {
         displayCode = '911',
         description = 'Robbery In Progress',
@@ -293,7 +293,7 @@ function Robbery(shopName, shopData)
     }
     TriggerServerEvent('wf-alerts:svNotify', dispatchData)
     Citizen.Wait(Config.RobTime * seconds)
-    Cooldown(shopName)
+    TriggerServerEvent('soviet:server:startCooldown', globalVar, shopData)
     isBusy = false
 end
 
