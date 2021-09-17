@@ -115,6 +115,32 @@ AddEventHandler('withdraw', function(withdrawAmount, shopInfo)
         DropPlayer(src, "Cheaters are not welcome here")
     end
 end)
+RegisterNetEvent('robberyAmount', function(shopData)
+    local src = source
+    local plyLoc = GetEntityCoords(GetPlayerPed(src))
+    local spotLoc = #(shopData.locations.robLocation - plyLoc)
+    local Player = QBCore.Functions.GetPlayer(src)
+    local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
+    local result = exports.ghmattimysql:executeSync(
+        'SELECT * FROM sbshops WHERE shopName=@shopName AND citizenid = @citizenid', {
+            ['@shopName'] = shopData.name,
+            ['@citizenid'] = cid,
+            ['@accountMoney'] = 0
+        })
+    if spotLoc < 2 then
+        exports.ghmattimysql:execute('UPDATE sbshops SET accountMoney = @acctMny WHERE shopName=@shopName', {
+            ['@shopName'] = shopData.name,
+            ['@acctMny'] = result[1].accountMoney - result[1].accountMoney / Config.Percent
+        }, function()
+            local val = result[1].accountMoney / Config.Percent
+
+            TriggerClientEvent("QBCore:Notify", src,
+                string.format("You have taken %s dollars from %s", math.ceil(val), shopData.name), "success", 5000)
+            Player.Functions.AddMoney('cash', result[1].accountMoney / Config.Percent)
+        end)
+    end
+end)
+
 
 RegisterServerEvent('deposit')
 AddEventHandler('deposit', function(depositAmount, shopInfo)
@@ -162,7 +188,7 @@ AddEventHandler('test', function(itemQuantity, shopName, itemName, itemPrice, sl
         table.insert(items, {
             name = itemName,
             amount = itemQuantity,
-            slot = slotID,
+            slot = #items+1,
             price = sellPrice
         })
     else
@@ -178,7 +204,7 @@ AddEventHandler('test', function(itemQuantity, shopName, itemName, itemPrice, sl
             table.insert(items, {
                 name = itemName,
                 amount = itemQuantity,
-                slot = slotID,
+                slot = #items+1,
                 price = sellPrice
             })
         end
@@ -196,4 +222,81 @@ end)
 QBCore.Functions.CreateCallback('SBShops:GetShopInvData', function(source, cb, shopName)
     local items = exports.ghmattimysql:scalarSync('SELECT items FROM sbshops WHERE shopName=@shopName', { ['@shopName'] = shopName })
     cb(json.decode(items))
+end)
+
+RegisterServerEvent('qb-shops:server:UpdateShopItems')
+AddEventHandler('qb-shops:server:UpdateShopItems', function(shop, data, amount)
+  local result = exports.ghmattimysql:executeSync(
+  'SELECT * FROM sbshops WHERE shopName=@shopName', {
+      ['@shopName'] = Config.Shops[shop].name
+  })
+  local items = json.decode(result[1].items)
+  local accMon = result[1].accountMoney
+  for k,v in pairs(items) do
+    if v.name == data.name then
+      items[k].amount = items[k].amount - amount
+      if (items[k].amount <= 0 or items[k].amount == 0.0) then
+        table.remove(items, k)
+        for g,f in pairs(items) do
+          if f.slot > v.slot then items[g].slot = items[g].slot - 1 end
+        end
+      end
+    end
+  end
+  exports.ghmattimysql:execute('UPDATE sbshops SET items = @items, accountMoney = @acMon WHERE shopName=@shopName', {
+      ['@shopName'] = Config.Shops[shop].name,
+      ['@acMon'] = accMon+data.price*amount,
+      ['@items'] = json.encode(items)
+  })
+end)
+
+Citizen.CreateThread(function()
+  Wait(5000)
+  local shops = exports.ghmattimysql:executeSync('SELECT * FROM sbshops ', {})
+  for i = 1,#shops do
+    if shops[i].citizenid == nil or shops[i].citizenid == '' then
+      local items = {}
+      for k,v in pairs(Config.Shops) do
+        if shops[i].shopName == v.name then
+          for g,f in pairs(v.allowedItems) do
+            table.insert(items, {name = f.name, amount = f.amount, price = f.price, slot = f.slot})
+          end
+        end
+      end
+      exports.ghmattimysql:execute('UPDATE sbshops SET items = @items WHERE shopName=@shopName', {
+          ['@shopName'] = shops[i].shopName,
+          ['@items'] = json.encode(items)
+      })
+    end
+  end
+end)
+
+QBCore.Functions.CreateCallback('soviet:server:getCops', function(source, cb)
+    local amount = 0
+    for k, v in pairs(QBCore.Functions.GetPlayers()) do
+        local Player = QBCore.Functions.GetPlayer(v)
+        if Player ~= nil then
+            if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
+                amount = amount + 1
+            end
+        end
+    end
+    cb(amount)
+end)
+
+
+RegisterServerEvent('soviet:server:syncStatus')
+AddEventHandler('soviet:server:syncStatus', function(shopData, shopName, robbed,  cooling)
+    if robbed ~= nil then
+        Config.Shops[shopName][shopData].robbed = robbed
+    end
+    if cooling ~= nil then
+        Config.Shops[shopName][shopData].onC = cooling
+    end
+    TriggerClientEvent('soviet:client:syncStatus', -1, shopData, shopName,robbed, cooling)
+end)
+
+RegisterServerEvent('soviet:server:getZones')
+AddEventHandler('soviet:server:getZones', function()
+    TriggerClientEvent('soviet:client:syncZones', source, Config.Shops)
 end)
