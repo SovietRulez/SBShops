@@ -286,10 +286,10 @@ end)
 
 RegisterServerEvent('soviet:server:startCooldown')
 AddEventHandler('soviet:server:startCooldown', function(globalVar, shopData)
-    print(Config.Shops[globalVar].name.onC)
     if not Config.Shops[globalVar].onC then
         Config.Shops[globalVar].onC = true
         Wait(Config.Shops[globalVar].cooldown * 1000)
+        Config.Shops[globalVar].onC = false
         Config.Shops[globalVar].onC = false
     end
 end)
