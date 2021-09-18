@@ -103,7 +103,9 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function(label)
+    TriggerServerEvent('soviet:server:getZones')
     if not Config.QBTarget then
+        
         while true do
             sleep = 500
             local player = PlayerPedId()
@@ -125,13 +127,14 @@ Citizen.CreateThread(function(label)
                         elseif currentZone == 'customer' then
                             DrawText3D(shopData.locations[currentZone], "~g~" .. 'Shop Here')
                         elseif currentZone == 'robLocation' then
-                            if not shopData.onC and not robbed then
+                            if not Config.Shops[globalVar].onC and not Config.Shops[globalVar].robbed then
                                 DrawText3D(shopData.locations[currentZone], "~r~ Rob store ~w~" .. shopData.name)
                             else
                                 DrawText3D(shopData.locations[currentZone], "~r~ Store on cooldown")
                             end
                         end
-                        if IsControlJustReleased(1, 38) then
+                        if IsControlJustReleased(1, 38) and not isBusy then
+                            isBusy = true
                             OpenMenu(currentZone)
                         end
                     end
@@ -200,10 +203,10 @@ function OpenMenu(currentZone)
             TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_" .. globalVar, ShopItems)
         end, Config.Shops[globalVar].name)
     elseif currentZone == 'robLocation' then
+        print(Config.Shops[globalVar].onC)
         if not Config.Shops[globalVar].onC  then
             QBCore.Functions.TriggerCallback('soviet:server:getCops', function(cops)
                 if cops >= Config.CopsRequired then
-                    Config.Shops[globalVar].robbed = true
                     robberyTimer = Config.RobTime
                     Robbery(globalVar, shopData)
                     Citizen.Wait(robberyTimer)
@@ -274,6 +277,7 @@ function LocalInput(text, number, windows)
         local result = GetOnscreenKeyboardResult()
         return result
     end
+    isBusy = false
 end
 
 function Robbery(globalVar, shopData)
