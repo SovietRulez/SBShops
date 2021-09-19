@@ -14,35 +14,71 @@ Config.Shops = {
             robLocation = vector3(373.1, 329.05, 103.57),
             realEstate = vector3(378.57, 321.35, 103.39)
         },
-        price = 1, -- Price for shop sale
+        price = 100000, -- Price for shop sale
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
+                price = 8,
                 amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 100,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
             },
             [3] = {
-                name = 'weed_skunk',
-                price = 10,
+                name = 'kurkakola',
+                price = 8,
                 amount = 100,
                 slot = 3
             },
             [4] = {
-                name = 'repairkit',
-                price = 10,
-                amount = 1000,
-                slot = 3
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
             },
         },
         robbed = false, -- DONT TOUCH
-        cooldown = 1000, --ROBBERY COOLDOWN
+        cooldown = 30, --ROBBERY COOLDOWN
         onC = false -- DONT TOUCH
     },
     nacho = {
@@ -53,29 +89,71 @@ Config.Shops = {
             robLocation = vector3(24.4, -1344.09, 29.5),
             realEstate = vector3(30.33, -1339.35, 29.5)
         },
-        price = 1000,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
             },
             [3] = {
-                name = 'repairkit',
-                price = 10,
+                name = 'kurkakola',
+                price = 8,
                 amount = 100,
                 slot = 3
-            }
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     savage = {
@@ -86,23 +164,71 @@ Config.Shops = {
             robLocation = vector3(-705.93, -911.11, 19.22),
             realEstate = vector3(-708.11, -917.18, 19.21)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     lips = {
@@ -113,23 +239,71 @@ Config.Shops = {
             robLocation = vector3(-1484.69, -379.05, 40.16),
             realEstate = vector3(-1491.11, -386.08, 39.7)
         },
-        price = 1, -- PRICE FOR STORE
+        price = 100000, -- PRICE FOR STORE
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     llcooljay = {
@@ -140,23 +314,71 @@ Config.Shops = {
             robLocation = vector3(1164.9, -320.19, 69.21),
             realEstate = vector3(1162.75, -327.23, 69.16)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     testr = {
@@ -167,29 +389,71 @@ Config.Shops = {
             robLocation = vector3(1729.09, 6418.04, 35.04),
             realEstate = vector3(1732.51, 6409.26, 35.0)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }--[[,
+            },
             [3] = {
-                name = 'repairkit',
-                price = 10,
-                amount = 1000,
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
                 slot = 3
-            }]]
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     eat = {
@@ -200,23 +464,71 @@ Config.Shops = {
             robLocation = vector3(1699.63, 4921.04, 42.06),
             realEstate = vector3(1695.94, 4927.79, 42.08)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     xrated = {
@@ -227,23 +539,71 @@ Config.Shops = {
             robLocation = vector3(2675.75, 3280.53, 55.24),
             realEstate = vector3(2684.7, 3283.79, 55.24)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     sorry = {
@@ -254,23 +614,71 @@ Config.Shops = {
             robLocation = vector3(1958.59, 3742.34, 32.34),
             realEstate = vector3(1967.93, 3739.19, 32.34)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     stupid = {
@@ -281,23 +689,71 @@ Config.Shops = {
             robLocation = vector3(549.59, 2668.41, 42.16),
             realEstate = vector3(542.18, 2674.6, 42.17)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     testing = {
@@ -308,23 +764,71 @@ Config.Shops = {
             robLocation = vector3(-3245.41, 1000.13, 12.83),
             realEstate = vector3(-3237.65, 1007.33, 12.39)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     hewasnt = {
@@ -335,23 +839,71 @@ Config.Shops = {
             robLocation = vector3(-3041.59, 583.55, 7.91),
             realEstate = vector3(-3037.01, 592.22, 7.81)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     james = {
@@ -362,23 +914,71 @@ Config.Shops = {
             robLocation = vector3(-2966.17, 388.53, 15.04),
             realEstate = vector3(-2974.96, 389.68, 15.03)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     wheels = {
@@ -389,23 +989,71 @@ Config.Shops = {
             robLocation = vector3(2554.12, 380.81, 108.62),
             realEstate = vector3(2561.06, 386.66, 108.62)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     loose = {
@@ -416,23 +1064,71 @@ Config.Shops = {
             robLocation = vector3(-1223.81, -909.97, 12.33),
             realEstate = vector3(-1228.39, -902.72, 12.22)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     rico = {
@@ -443,23 +1139,71 @@ Config.Shops = {
             robLocation = vector3(1125.69, -980.92, 45.42),
             realEstate = vector3(1143.03, -979.28, 46.28)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     },
     burrito = {
@@ -470,23 +1214,71 @@ Config.Shops = {
             robLocation = vector3(-42.19, -1749.16, 29.42),
             realEstate = vector3(-51.2, -1759.16, 29.44)
         },
-        price = 1,
+        price = 100000,
         allowedItems = {
             [1] = {
                 name = 'sandwich',
-                price = 10,
-                amount = 100,
+                price = 8,
+                amount = 10,
                 slot = 1
             },
             [2] = {
-                name = 'lockpick',
-                price = 10,
+                name = 'water_bottle',
+                price = 8,
                 amount = 100,
                 slot = 2
-            }
+            },
+            [3] = {
+                name = 'kurkakola',
+                price = 8,
+                amount = 100,
+                slot = 3
+            },
+            [4] = {
+                name = 'twerks_candy',
+                price = 8,
+                amount = 100,
+                slot = 4
+            },
+            [5] = {
+                name = 'snikkel_candy',
+                price = 8,
+                amount = 100,
+                slot = 5
+            },
+            [6] = {
+                name = 'tosti',
+                price = 8,
+                amount = 100,
+                slot = 6
+            },
+            [7] = {
+                name = 'whiskey',
+                price = 14,
+                amount = 100,
+                slot = 7
+            },
+            [8] = {
+                name = 'vodka',
+                price = 14,
+                amount = 100,
+                slot = 8
+            },
+            [9] = {
+                name = 'beer',
+                price = 12,
+                amount = 100,
+                slot = 9
+            },
+            [10] = {
+                name = 'bandage',
+                price = 100,
+                amount = 100,
+                slot = 10
+            },
         },
         robbed = false,
-        cooldown = 10,
+        cooldown = 30,
         onC = false
     }
 }
