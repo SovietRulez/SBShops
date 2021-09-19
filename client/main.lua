@@ -45,14 +45,23 @@ local orderButton = menu2:AddButton({
     description = 'Order Shop Inventory'
 })
 
--- Shop Sale Menu
 local sellStoreButton = menu3:AddButton({
     icon = '😃',
     label = 'placeholder',
     value = 0,
     description = 'Sells Current Location To Closest Player'
 })
+local exit = menu3:AddButton({
+    icon = '😃',
+    label = 'Close Menu(Realestate ONLY)',
+    value = 0,
+    description = 'use this to close realestate menu!'
+})
 
+exit:On('select', function()
+    MenuV:CloseMenu(menu3)
+    isBusy = false
+end)
 withdrawButton:On('select', function()
     local src = source
     local shopInfo = Config.Shops[globalVar]
@@ -72,7 +81,7 @@ end)
 -- end)
 
 sellStoreButton:On('select', function()
-    local target = 3--GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
+    local target = GetPlayerServerId(QBCore.Functions.GetClosestPlayer(GetEntityCoords(PlayerPedId())))
     local shopInfo = Config.Shops[globalVar]
 
     QBCore.Functions.TriggerCallback('sellShop', function(cb)
@@ -189,8 +198,7 @@ function OpenMenu(currentZone)
                 QBCore.Functions.Notify(string.format("You must contact store owner or %s for assistance", Config.Job), 'error', 5000)
             end
         end, Config.Shops[globalVar].name)
-    elseif currentZone == 'realEstate' then
-        isBusy = false
+    elseif currentZone == 'realEstate' and isBusy then
         if QBCore.Functions.GetPlayerData().job.name == Config.Job then
                 
             MenuV:OpenMenu(menu3, globalVar)
@@ -222,16 +230,7 @@ function OpenMenu(currentZone)
         end
     end
 end
-function RobberyStuff()
-    local distance = #(playerPos - Config.Shops[globalVar].locations.robLocation)
-                    if distance < 2 then
-                    TriggerServerEvent('robberyAmount', Config.Shops[globalVar])
-                    isBusy = false
-                end
-                if distance > 2 then
-                    QBCore.Functions.Notify("GF", 'error', 5000)
-                end
-end
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
