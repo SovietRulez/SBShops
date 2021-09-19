@@ -18,7 +18,8 @@ QBCore.Functions.CreateCallback('sellShop', function(source, cb, target, shopInf
             TriggerEvent('qb-bossmenu:server:addAccountMoney', Config.Job, shopInfo.price)
 
             TriggerClientEvent("QBCore:Notify", src, string.format(
-                shopInfo.name .. " has been sold to %s %s and money deposited with %s", targetFn, targetLn, Config.Job), "success", 5000)
+                shopInfo.name .. " has been sold to %s %s and money deposited with %s", targetFn, targetLn, Config.Job),
+                "success", 5000)
             TriggerClientEvent("QBCore:Notify", target, "You now own the shop " .. shopInfo.name, "success", 5000)
             exports['oxmysql']:execute('UPDATE sbshops SET citizenid = :citizenid WHERE shopName = :shopName', {
                 ['citizenid'] = targetCID,
@@ -28,7 +29,8 @@ QBCore.Functions.CreateCallback('sellShop', function(source, cb, target, shopInf
             local player = QBCore.Functions.GetPlayerByCitizenId(result[1].citizenid)
             local firstname = player.PlayerData.charinfo.firstname
             local lastname = player.PlayerData.charinfo.lastname
-            TriggerClientEvent("QBCore:Notify", src, string.format("Shop owned by %s %s", firstname, lastname), "error", 5000)
+            TriggerClientEvent("QBCore:Notify", src, string.format("Shop owned by %s %s", firstname, lastname), "error",
+                5000)
         end
     elseif Player.PlayerData.money.bank < shopInfo.price then
         TriggerClientEvent("QBCore:Notify", src, string.format("Client is to broke to pay"), "error", 5000)
@@ -45,10 +47,12 @@ QBCore.Functions.CreateCallback('repoShop', function(source, cb, globalVar, shop
             exports['oxmysql']:execute('UPDATE sbshops SET citizenid = NULL WHERE shopName=:shopName', {
                 ['shopName'] = globalVar
             }, function()
-                TriggerClientEvent("QBCore:Notify", src, string.format("%s has been reposessed", globalVar), "success", 5000)
+                TriggerClientEvent("QBCore:Notify", src, string.format("%s has been reposessed", globalVar), "success",
+                    5000)
             end)
         else
-            TriggerClientEvent("QBCore:Notify", src, string.format("%s could not be reposessed, beause it's not owned!", globalVar), "error", 5000)
+            TriggerClientEvent("QBCore:Notify", src,
+                string.format("%s could not be reposessed, beause it's not owned!", globalVar), "error", 5000)
         end
     end
 end)
@@ -56,9 +60,8 @@ end)
 QBCore.Functions.CreateCallback('isOwner', function(source, cb, shopName)
     local src = source
     local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
-    print(shopName, cid)
-    local result = exports.oxmysql:scalarSync('SELECT 1 FROM sbshops WHERE shopname = ? AND citizenid = ?', {shopName, cid})
-    print(result)
+    local result = exports.oxmysql:scalarSync('SELECT 1 FROM sbshops WHERE shopname = ? AND citizenid = ?',
+        {shopName, cid})
 
     if result then
         cb(true)
@@ -104,28 +107,28 @@ AddEventHandler('withdraw', function(withdrawAmount, shopInfo)
                     ['shopName'] = shopInfo.name,
                     ['withdrawAmount'] = withdrawAmount
                 }, function()
-                    TriggerClientEvent("QBCore:Notify", src, string.format("%s has withdrawn %s", shopInfo.name, withdrawAmount), "success", 5000)
+                    TriggerClientEvent("QBCore:Notify", src,
+                        string.format("%s has withdrawn %s", shopInfo.name, withdrawAmount), "success", 5000)
                     Player.Functions.AddMoney('bank', withdrawAmount)
                 end)
         else
-            TriggerClientEvent("QBCore:Notify", src, string.format("%s Doesnt have that kind of bread!", shopInfo.name), "error", 5000)
+            TriggerClientEvent("QBCore:Notify", src, string.format("%s Doesnt have that kind of bread!", shopInfo.name),
+                "error", 5000)
         end
     else
         DropPlayer(src, "Cheaters are not welcome here")
     end
 end)
+
 RegisterNetEvent('robberyAmount', function(globalVar)
     local src = source
     local plyLoc = GetEntityCoords(GetPlayerPed(src))
     local spotLoc = #(globalVar.locations.robLocation - plyLoc)
     local Player = QBCore.Functions.GetPlayer(src)
-    local cid = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
-    local result = exports['oxmysql']:executeSync(
-        'SELECT * FROM sbshops WHERE shopName=:shopName AND citizenid = :citizenid', {
-            ['shopName'] = globalVar.name,
-            ['citizenid'] = cid,
-            ['accountMoney'] = 0
-        })
+    local result = exports['oxmysql']:executeSync('SELECT * FROM sbshops WHERE shopName=:shopName', {
+        ['shopName'] = globalVar.name,
+        ['accountMoney'] = 0
+    })
     if spotLoc < 2 then
         exports['oxmysql']:execute('UPDATE sbshops SET accountMoney = :acctMny WHERE shopName=:shopName', {
             ['shopName'] = globalVar.name,
@@ -137,9 +140,10 @@ RegisterNetEvent('robberyAmount', function(globalVar)
                 string.format("You have taken %s dollars from %s", math.ceil(val), globalVar.name), "success", 5000)
             Player.Functions.AddMoney('cash', result[1].accountMoney / Config.Percent)
         end)
+    else
+        TriggerClientEvent("QBCore:Notify", src, string.format("You ran out of the robbery zone! Dumbass"), "error", 5000)
     end
 end)
-
 
 RegisterServerEvent('deposit')
 AddEventHandler('deposit', function(depositAmount, shopInfo)
@@ -157,15 +161,18 @@ AddEventHandler('deposit', function(depositAmount, shopInfo)
         })
     if spotLoc < 2 then
         if result[1].accountMoney and money >= depositAmount then
-            exports['oxmysql']:execute('UPDATE sbshops SET accountMoney = accountMoney + :depositAmount WHERE shopName=:shopName', {
+            exports['oxmysql']:execute(
+                'UPDATE sbshops SET accountMoney = accountMoney + :depositAmount WHERE shopName=:shopName', {
                     ['shopName'] = shopInfo.name,
                     ['depositAmount'] = depositAmount
                 }, function()
-                    TriggerClientEvent("QBCore:Notify", src, string.format("You have deposited %s in %s store",depositAmount, shopInfo.name), "success", 5000)
+                    TriggerClientEvent("QBCore:Notify", src, string.format("You have deposited %s in %s store",
+                        depositAmount, shopInfo.name), "success", 5000)
                     Player.Functions.RemoveMoney('cash', depositAmount)
                 end)
         else
-            TriggerClientEvent("QBCore:Notify", src, string.format("You dont have that amount of bread holmes!"), "error", 5000)
+            TriggerClientEvent("QBCore:Notify", src, string.format("You dont have that amount of bread holmes!"),
+                "error", 5000)
         end
     else
         DropPlayer(src, "Cheaters are not welcome here")
@@ -181,13 +188,19 @@ AddEventHandler('test', function(itemQuantity, shopName, itemName, itemPrice, sl
     local cid = Player.PlayerData.citizenid
     local money = Player.PlayerData.money['cash']
     local moneyAmount = itemPrice * itemQuantity
-    local items = json.decode(exports['oxmysql']:scalarSync('SELECT items FROM sbshops WHERE shopName=:shopName AND citizenid = :citizenid', { ['shopName'] = shopName.name, ['citizenid'] = cid }))
-    if not items then items = {} end
+    local items = json.decode(exports['oxmysql']:scalarSync(
+        'SELECT items FROM sbshops WHERE shopName=:shopName AND citizenid = :citizenid', {
+            ['shopName'] = shopName.name,
+            ['citizenid'] = cid
+        }))
+    if not items then
+        items = {}
+    end
     if #items == 0 then
         table.insert(items, {
             name = itemName,
             amount = itemQuantity,
-            slot = #items+1,
+            slot = #items + 1,
             price = sellPrice
         })
     else
@@ -203,7 +216,7 @@ AddEventHandler('test', function(itemQuantity, shopName, itemName, itemPrice, sl
             table.insert(items, {
                 name = itemName,
                 amount = itemQuantity,
-                slot = #items+1,
+                slot = #items + 1,
                 price = sellPrice
             })
         end
@@ -213,61 +226,70 @@ AddEventHandler('test', function(itemQuantity, shopName, itemName, itemPrice, sl
         ['shopName'] = shopName.name,
         ['items'] = json.encode(items)
     }, function()
-        TriggerClientEvent("QBCore:Notify", src, string.format("You have bought %s %s worth $%s for store %s", itemQuantity, itemName, moneyAmount, shopName.name), "success", 5000)
+        TriggerClientEvent("QBCore:Notify", src, string.format("You have bought %s %s worth $%s for store %s",
+            itemQuantity, itemName, moneyAmount, shopName.name), "success", 5000)
         Player.Functions.RemoveMoney('cash', moneyAmount)
     end)
 end)
 
 QBCore.Functions.CreateCallback('SBShops:GetShopInvData', function(source, cb, shopName)
-    local items = exports['oxmysql']:scalarSync('SELECT items FROM sbshops WHERE shopName=@shopName', { ['@shopName'] = shopName })
+    local items = exports['oxmysql']:scalarSync('SELECT items FROM sbshops WHERE shopName=@shopName', {
+        ['@shopName'] = shopName
+    })
     cb(json.decode(items))
 end)
 
 RegisterServerEvent('qb-shops:server:UpdateShopItems')
 AddEventHandler('qb-shops:server:UpdateShopItems', function(shop, data, amount)
-  local result = exports['oxmysql']:executeSync(
-  'SELECT * FROM sbshops WHERE shopName=:shopName', {
-      ['shopName'] = Config.Shops[shop].name
-  })
-  local items = json.decode(result[1].items)
-  local accMon = result[1].accountMoney
-  for k,v in pairs(items) do
-    if v.name == data.name then
-      items[k].amount = items[k].amount - amount
-      if (items[k].amount <= 0 or items[k].amount == 0.0) then
-        table.remove(items, k)
-        for g,f in pairs(items) do
-          if f.slot > v.slot then items[g].slot = items[g].slot - 1 end
+    local result = exports['oxmysql']:executeSync('SELECT * FROM sbshops WHERE shopName=:shopName', {
+        ['shopName'] = Config.Shops[shop].name
+    })
+    local items = json.decode(result[1].items)
+    local accMon = result[1].accountMoney
+    for k, v in pairs(items) do
+        if v.name == data.name then
+            items[k].amount = items[k].amount - amount
+            if (items[k].amount <= 0 or items[k].amount == 0.0) then
+                table.remove(items, k)
+                for g, f in pairs(items) do
+                    if f.slot > v.slot then
+                        items[g].slot = items[g].slot - 1
+                    end
+                end
+            end
         end
-      end
     end
-  end
-  exports['oxmysql']:execute('UPDATE sbshops SET items = :items, accountMoney = :acMon WHERE shopName=:shopName', {
-      ['shopName'] = Config.Shops[shop].name,
-      ['acMon'] = accMon+data.price*amount,
-      ['items'] = json.encode(items)
-  })
+    exports['oxmysql']:execute('UPDATE sbshops SET items = :items, accountMoney = :acMon WHERE shopName=:shopName', {
+        ['shopName'] = Config.Shops[shop].name,
+        ['acMon'] = accMon + data.price * amount,
+        ['items'] = json.encode(items)
+    })
 end)
 
 Citizen.CreateThread(function()
-  Wait(5000)
-  local shops = exports['oxmysql']:executeSync('SELECT * FROM sbshops ', {})
-  for i = 1,#shops do
-    if shops[i].citizenid == nil or shops[i].citizenid == '' then
-      local items = {}
-      for k,v in pairs(Config.Shops) do
-        if shops[i].shopName == v.name then
-          for g,f in pairs(v.allowedItems) do
-            table.insert(items, {name = f.name, amount = f.amount, price = f.price, slot = f.slot})
-          end
+    Wait(5000)
+    local shops = exports['oxmysql']:executeSync('SELECT * FROM sbshops ', {})
+    for i = 1, #shops do
+        if shops[i].citizenid == nil or shops[i].citizenid == '' then
+            local items = {}
+            for k, v in pairs(Config.Shops) do
+                if shops[i].shopName == v.name then
+                    for g, f in pairs(v.allowedItems) do
+                        table.insert(items, {
+                            name = f.name,
+                            amount = f.amount,
+                            price = f.price,
+                            slot = f.slot
+                        })
+                    end
+                end
+            end
+            exports['oxmysql']:execute('UPDATE sbshops SET items = :items WHERE shopName=:shopName', {
+                ['shopName'] = shops[i].shopName,
+                ['items'] = json.encode(items)
+            })
         end
-      end
-      exports['oxmysql']:execute('UPDATE sbshops SET items = :items WHERE shopName=:shopName', {
-          ['shopName'] = shops[i].shopName,
-          ['items'] = json.encode(items)
-      })
     end
-  end
 end)
 
 QBCore.Functions.CreateCallback('soviet:server:getCops', function(source, cb)
@@ -283,13 +305,13 @@ QBCore.Functions.CreateCallback('soviet:server:getCops', function(source, cb)
     cb(amount)
 end)
 
-
 RegisterServerEvent('soviet:server:startCooldown')
 AddEventHandler('soviet:server:startCooldown', function(globalVar, shopData)
     if not Config.Shops[globalVar].onC then
         Config.Shops[globalVar].onC = true
+        TriggerClientEvent('soviet:client:shopCooldown', -1, globalVar, true)
         Wait(Config.Shops[globalVar].cooldown * 1000)
-        Config.Shops[globalVar].onC = false
+        TriggerClientEvent('soviet:client:shopCooldown', -1, globalVar, false)
         Config.Shops[globalVar].onC = false
     end
 end)
