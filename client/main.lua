@@ -165,7 +165,7 @@ function OpenMenu(currentZone)
                         local orderingButton = menu4:AddButton({
                             icon = '😃',
                             label = string.format('Order %s $%s',
-                                QBCore.Shared.Items[itemsAllowed[i].name].label, itemsAllowed[i].price),
+                                QBCore.Shared.Items[itemsAllowed[i].name].label, math.ceil(Config.PercentToSell/itemsAllowed[i].price)),
                             value = itemsAllowed[i].name,
                             description = string.format('Place order for %s',
                                 QBCore.Shared.Items[itemsAllowed[i].name].label)
@@ -184,9 +184,10 @@ function OpenMenu(currentZone)
                                 local sellPrice = LocalInput(
                                     string.format('%s price per unit', QBCore.Shared.Items[itemsAllowed[i].name].label), 255, '')
                                 if sellPrice ~= nil then
+                                    local ownerPrice = math.ceil(Config.PercentToSell/itemsAllowed[i].price)
                                     MenuV:CloseMenu(menu4)
                                     TriggerServerEvent('test', tonumber(purchaseAmount), shopInfo,
-                                        passThis, priceToPass, passt, sellPrice)
+                                        passThis, priceToPass, passt, sellPrice, ownerPrice, purchaseAmount)
                                 end
                             end
                         end)
@@ -195,7 +196,7 @@ function OpenMenu(currentZone)
                 MenuV:OpenMenu(menu2)
                 checkFundsButton.Label = string.format('Check Account Balance')
             else
-                QBCore.Functions.Notify(string.format("You must contact store owner or %s for assistance", Config.Job), 'error', 5000)
+                QBCore.Functions.Notify(string.format("You must contact store owner or %s for assistance with %s", Config.Job, Config.Shops[globalVar].name), 'error', 5000)
             end
         end, Config.Shops[globalVar].name)
     elseif currentZone == 'realEstate' and isBusy then
