@@ -1,5 +1,5 @@
 local src = source
-
+local minute = 1000 * 60
 QBCore.Functions.CreateCallback('sellShop', function(source, cb, target, shopInfo)
     local src = source
     local Player = QBCore.Functions.GetPlayer(target)
@@ -180,7 +180,7 @@ AddEventHandler('deposit', function(depositAmount, shopInfo)
 end)
 
 RegisterServerEvent('test')
-AddEventHandler('test', function(itemQuantity, shopName, itemName, itemPrice, slotID, sellPrice)
+AddEventHandler('test', function(itemQuantity, shopName, itemName, itemPrice, slotID, sellPrice, purchaseAmount, ownerPrice)
     local src = source
     local plyLoc = GetEntityCoords(GetPlayerPed(src))
     local spotLoc = #(shopName.locations.boss - plyLoc)
@@ -226,17 +226,17 @@ AddEventHandler('test', function(itemQuantity, shopName, itemName, itemPrice, sl
         ['shopName'] = shopName.name,
         ['items'] = json.encode(items)
     }, function()
-        TriggerClientEvent("QBCore:Notify", src, string.format("You have bought %s %s worth $%s for store %s",
-            itemQuantity, itemName, moneyAmount, shopName.name), "success", 5000)
-        Player.Functions.RemoveMoney('cash', moneyAmount)
+        TriggerClientEvent("QBCore:Notify", src, string.format("You have bought %s %s worth $%s for store %s",itemQuantity, itemName, math.ceil(ownerPrice * purchaseAmount), shopName.name), "success", 5000)
+        Player.Functions.RemoveMoney('cash', math.ceil(ownerPrice * purchaseAmount))
     end)
 end)
 
 QBCore.Functions.CreateCallback('SBShops:GetShopInvData', function(source, cb, shopName)
-    local items = exports['oxmysql']:scalarSync('SELECT items FROM sbshops WHERE shopName=@shopName', {
-        ['@shopName'] = shopName
+    local items = exports['oxmysql']:scalarSync('SELECT items FROM sbshops WHERE shopName=:shopName', {
+        ['shopName'] = shopName
     })
-    cb(json.decode(items))
+    local decoded = json.decode(items)
+    cb(decoded)
 end)
 
 RegisterServerEvent('qb-shops:server:UpdateShopItems')
@@ -310,7 +310,7 @@ AddEventHandler('soviet:server:startCooldown', function(globalVar, shopData)
     if not Config.Shops[globalVar].onC then
         Config.Shops[globalVar].onC = true
         TriggerClientEvent('soviet:client:shopCooldown', -1, globalVar, true)
-        Wait(Config.Shops[globalVar].cooldown * 1000)
+        Wait(Config.Shops[globalVar].cooldown * minute)
         TriggerClientEvent('soviet:client:shopCooldown', -1, globalVar, false)
         Config.Shops[globalVar].onC = false
     end
