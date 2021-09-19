@@ -129,7 +129,7 @@ RegisterNetEvent('robberyAmount', function(globalVar)
         ['shopName'] = globalVar.name,
         ['accountMoney'] = 0
     })
-    if spotLoc < 2 then
+    if spotLoc < 8 then
         exports['oxmysql']:execute('UPDATE sbshops SET accountMoney = :acctMny WHERE shopName=:shopName', {
             ['shopName'] = globalVar.name,
             ['acctMny'] = result[1].accountMoney - result[1].accountMoney / Config.Percent
