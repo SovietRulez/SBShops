@@ -210,7 +210,7 @@ function OpenMenu(currentZone)
         QBCore.Functions.TriggerCallback('SBShops:GetShopInvData', function(cb)
             ShopItems.label = Config.Shops[globalVar].name
             ShopItems.items = cb
-            ShopItems.slots = 10
+            ShopItems.slots = Config.MaxSlots
             TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_" .. globalVar, ShopItems)
         end, Config.Shops[globalVar].name)
     elseif currentZone == 'robLocation' then
