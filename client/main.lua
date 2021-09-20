@@ -134,7 +134,7 @@ Citizen.CreateThread(function(label)
                         elseif currentZone == 'realEstate' then
                             DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                         elseif currentZone == 'customer' then
-                            DrawText3D(shopData.locations[currentZone], "~g~" .. 'Shop Here')
+                            DrawText3D(shopData.locations[currentZone], string.format('~g~Shop here at %s', Config.Shops[globalVar].name))
                         elseif currentZone == 'robLocation' and not Config.Shops[globalVar].onC then
                                 DrawText3D(shopData.locations[currentZone], "~r~ Rob store ~w~" .. shopData.name)
                             else
@@ -210,7 +210,7 @@ function OpenMenu(currentZone)
         QBCore.Functions.TriggerCallback('SBShops:GetShopInvData', function(cb)
             ShopItems.label = Config.Shops[globalVar].name
             ShopItems.items = cb
-            ShopItems.slots = Config.MaxSlots
+            ShopItems.slots = 20
             TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_" .. globalVar, ShopItems)
         end, Config.Shops[globalVar].name)
     elseif currentZone == 'robLocation' then
@@ -223,10 +223,9 @@ function OpenMenu(currentZone)
                     Robbery(globalVar, shopData)
                     Citizen.Wait(robberyTimer)
                     TriggerServerEvent('robberyAmount', Config.Shops[globalVar])
-                else
-                    QBCore.Functions.Notify("Not enough cops", 'error', 5000)
                 end
             end
+            QBCore.Functions.Notify("Not enough cops", 'error', 5000)
             end)
         end
     end
@@ -333,6 +332,9 @@ RegisterNetEvent('soviet:client:shopCooldown')
 AddEventHandler('soviet:client:shopCooldown', function(shop, set)
   Config.Shops[shop].onC = set
 end)
+RegisterCommand("test", function(source, args, rawCommand)
+TriggerEvent('qb-shops:client:UpdateShop')
+end, false)
 
 Citizen.CreateThread(function()
     for k, v in pairs(Config.Shops) do
