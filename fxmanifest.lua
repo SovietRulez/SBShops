@@ -1,6 +1,6 @@
 fx_version 'cerulean'
 game 'gta5'
-author 'SovietRulez#0001 | Bear#6792 '
+author 'SovietRulez#0001'
 description 'SBShops'
 version '1.0.0'
 
