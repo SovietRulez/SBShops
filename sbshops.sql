@@ -37,7 +37,7 @@ INSERT INTO `sbshops` (`id`, `citizenid`, `shopName`, `items`, `accountMoney`) V
 	(141, NULL, 'Shop8', '[]', 0),
 	(142, NULL, 'Shop9', '[]', 0),
 	(143, NULL, 'Shop10', '[]', 0),
-	(144, NULL, 'Shop11', '[{"slot":2,"name":"lockpick","price":10,"amount":100},{"slot":1,"name":"sandwich","price":10,"amount":100}]', 0),
+	(144, NULL, 'Shop11', '[]', 0),
 	(145, NULL, 'Shop12', '[]', 0),
 	(146, NULL, 'Shop13', '[]', 0),
 	(147, NULL, 'Shop14', '[]', 0),
