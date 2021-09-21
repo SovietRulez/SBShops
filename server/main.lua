@@ -244,6 +244,7 @@ AddEventHandler('qb-shops:server:UpdateShopItems', function(shop, data, amount)
     local result = exports['oxmysql']:executeSync('SELECT * FROM sbshops WHERE shopName=:shopName', {
         ['shopName'] = Config.Shops[shop].name
     })
+    print(Config.Shops[shop].name)
     local items = json.decode(result[1].items)
     local accMon = result[1].accountMoney
     for k, v in pairs(items) do
