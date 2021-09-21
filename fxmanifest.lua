@@ -21,5 +21,6 @@ server_script 'server/main.lua'
 dependencies {
 	'qb-inventory',
 	'linden_outlawalert',
-	'oxmysql'
+	'oxmysql',
+	'menuv'
 }
