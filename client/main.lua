@@ -137,7 +137,7 @@ Citizen.CreateThread(function(label)
                             DrawText3D(shopData.locations[currentZone], string.format('~g~Shop here at %s', Config.Shops[globalVar].name))
                         elseif currentZone == 'robLocation' and not Config.Shops[globalVar].onC then
                                 DrawText3D(shopData.locations[currentZone], "~r~ Rob store ~w~" .. shopData.name)
-                            else
+                        elseif currentZone == 'robLocation' and  Config.Shops[globalVar].onC then
                                 DrawText3D(shopData.locations[currentZone], "~r~ Store on cooldown")
                             end
                         end
@@ -200,11 +200,11 @@ function OpenMenu(currentZone)
             end
         end, Config.Shops[globalVar].name)
     elseif currentZone == 'realEstate' and isBusy then
-        if QBCore.Functions.GetPlayerData().job.name == Config.Job then
+        --if QBCore.Functions.GetPlayerData().job.name == Config.Job then
                 
             MenuV:OpenMenu(menu3, globalVar)
             sellStoreButton.Label = string.format('Sell Store to Player ($%s)', Config.Shops[globalVar].price)
-        end
+       -- end
     elseif currentZone == 'customer' then
         isBusy = false
         QBCore.Functions.TriggerCallback('SBShops:GetShopInvData', function(cb)
