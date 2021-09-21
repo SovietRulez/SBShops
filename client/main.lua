@@ -131,7 +131,7 @@ Citizen.CreateThread(function(label)
                             itemsAllowed = shopData.allowedItems
                             itemNames = itemsAllowed.name
                             DrawText3D(shopData.locations[currentZone], "~g~ Boss Menu")
-                        elseif currentZone == 'realEstate' then
+                        elseif currentZone == 'realEstate' and QBCore.Functions.GetPlayerData().job.name == Config.Job then
                             DrawText3D(shopData.locations[currentZone], "~g~" .. 'Realestate Options')
                         elseif currentZone == 'customer' then
                             DrawText3D(shopData.locations[currentZone], string.format('~g~Shop here at %s', Config.Shops[globalVar].name))
@@ -225,7 +225,9 @@ function OpenMenu(currentZone)
                     TriggerServerEvent('robberyAmount', Config.Shops[globalVar])
                 end
             end
+            if cops < Config.CopsRequired then
             QBCore.Functions.Notify("Not enough cops", 'error', 5000)
+            end
             end)
         end
     end
