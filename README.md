@@ -12,7 +12,7 @@ Thank you Kakarot for helping optimize.
 *Planned updates* 
 I plan on bringing in weaponshops, and "blackmarket" locations(shops that wont show up on map. This is a planned update and I have yet to start it. Thank you
 
-
+Put the config for qb-shops in replace of its current, Or comment out the vectors for the shops
 Go into qb-shops and edit line 1 server side event to
 ```lua
 RegisterServerEvent('qb-shops:server:UpdateShopItems')
