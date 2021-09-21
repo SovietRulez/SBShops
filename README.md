@@ -1,6 +1,6 @@
 # SBShops
 Player owned shop system
-**FORKING IS NOT AUTHORIZED
+**FORKING IS NOT AUTHORIZED**
 
 You can create as many shops as you would like. You must have the name within config the same name as shopName in database.
 This script is not authorized to be forked, re released as a modification, or sold.
