@@ -8,7 +8,7 @@ You can PR this repo and I will actively check and test the PRs.
 
 Thank you Kakarot for helping optimize.
 
-
+If you like my work and want to support it you can buy me a kofi! https://ko-fi.com/sovietrulez
 *Planned updates* 
 I plan on bringing in weaponshops, and "blackmarket" locations(shops that wont show up on map. This is a planned update and I have yet to start it. Thank you
 
