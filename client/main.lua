@@ -105,6 +105,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
+        robberyTimer = robberyTimer - 1
         if isBusy then
             DisableControlAction(0, 38, true)
         end
@@ -232,17 +233,9 @@ end
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(1000)
-        robberyTimer = robberyTimer - 1
-    end
-end)
-
-Citizen.CreateThread(function()
-    while true do
         Citizen.Wait(5)
         if robberyTimer > 0 then
-            DrawTxt(0.93, 1.44, 1.0, 1.0, 0.6,
-                "Shop is being robbed for ~r~" .. math.ceil(robberyTimer) .. "~w~ more seconds", 255, 255, 255, 255)
+            DrawTxt(0.93, 1.44, 1.0, 1.0, 0.6,"Shop is being robbed for ~r~" .. math.ceil(robberyTimer) .. "~w~ more seconds", 255, 255, 255, 255)
         end
     end
 end)
