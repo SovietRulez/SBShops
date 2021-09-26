@@ -200,11 +200,8 @@ function OpenMenu(currentZone)
             end
         end, Config.Shops[globalVar].name)
     elseif currentZone == 'realEstate' and isBusy then
-        --if QBCore.Functions.GetPlayerData().job.name == Config.Job then
-                
             MenuV:OpenMenu(menu3, globalVar)
             sellStoreButton.Label = string.format('Sell Store to Player ($%s)', Config.Shops[globalVar].price)
-       -- end
     elseif currentZone == 'customer' then
         isBusy = false
         QBCore.Functions.TriggerCallback('SBShops:GetShopInvData', function(cb)
